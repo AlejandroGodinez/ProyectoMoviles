@@ -1,7 +1,9 @@
-import 'package:ProyectoMoviles/login.dart';
-import 'package:ProyectoMoviles/register_page.dart';
-import 'package:ProyectoMoviles/splashscreen_page.dart';
+import 'package:ProyectoMoviles/initial/login.dart';
+import 'package:ProyectoMoviles/initial/register_page.dart';
+import 'package:ProyectoMoviles/initial/splashscreen_page.dart';
 import 'package:flutter/material.dart';
+
+import 'home/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,9 +25,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
+        '/home': (context) => HomePage(),
       },
     );
   }
 }
-
-

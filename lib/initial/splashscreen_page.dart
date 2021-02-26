@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
-import 'constants.dart';
+import '../utils/constants.dart';
 
 class SplashScreenPage extends StatefulWidget {
   SplashScreenPage({Key key}) : super(key: key);

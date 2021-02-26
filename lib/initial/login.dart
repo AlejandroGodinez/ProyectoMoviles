@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ProyectoMoviles/utils/constants.dart';
 
-import 'constants.dart';
-
-class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key key}) : super(key: key);
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
+  bool hidePswd = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,16 +44,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: MediaQuery.of(context).size.height * 0.03,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextField(
+                    obscureText: hidePswd,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
                       filled: true,
                       fillColor: Colors.white,
+                      suffixIcon: IconButton(
+                        iconSize: 25,
+                        icon: (hidePswd
+                            ? Icon(
+                                Icons.visibility_off_outlined,
+                                color: Colors.grey,
+                              )
+                            : Icon(
+                                Icons.visibility_outlined,
+                                color: Colors.grey,
+                              )),
+                        onPressed: () {
+                          print(hidePswd);
+                          setState(() {
+                            hidePswd = !hidePswd;
+                          });
+                          print(hidePswd);
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -74,7 +94,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: TextStyle(color: white, fontSize: 20),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/home');
+                  },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
@@ -96,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         TextSpan(
-                          text: '\nREGISTRATE',
+                          text: '\nRegistrate',
                           style: TextStyle(
                               fontSize: 24,
                               color: buttonBlue,
