@@ -1,3 +1,4 @@
+import 'package:ProyectoMoviles/help_page.dart';
 import 'package:ProyectoMoviles/initial/login.dart';
 import 'package:ProyectoMoviles/initial/register_page.dart';
 import 'package:ProyectoMoviles/initial/splashscreen_page.dart';
@@ -27,6 +28,7 @@ class _MyAppState extends State<MyApp> {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/home': (context) => HomePage(),
+        '/help': (context) => HelpPage(),
       },
     );
   }

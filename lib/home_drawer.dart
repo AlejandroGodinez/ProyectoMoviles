@@ -54,7 +54,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
               title: Text("Ayuda",
                   style: TextStyle(fontSize: 16, color: Colors.grey[600])),
               leading: Icon(Icons.help),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed('/help');
+              },
             ),
             Spacer(),
             Padding(
