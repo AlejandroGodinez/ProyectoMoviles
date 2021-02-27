@@ -1,3 +1,4 @@
+import 'package:ProyectoMoviles/home_drawer.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      drawer: Text('hola'),
+      drawer: HomeDrawer(),
       body: Column(
         children: [
           SizedBox(
@@ -123,13 +124,11 @@ class _HomePageState extends State<HomePage> {
               child: GridView.builder(
                 itemCount: 6,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                  crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                  childAspectRatio: 0.8
-                ),
-                itemBuilder: (context,index) =>
-                  ItemCard(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                    crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                    childAspectRatio: 0.8),
+                itemBuilder: (context, index) => ItemCard(),
               ),
             ),
           )
