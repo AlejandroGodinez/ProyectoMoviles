@@ -12,14 +12,25 @@ class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-         padding: EdgeInsets.all(40.0),
-         height: 180,
-         width: 160,
-         decoration: BoxDecoration(
-           color: orange,
-           borderRadius: BorderRadius.circular(16),
-         ),
-         child: Text("Bebida"),
+      padding: EdgeInsets.all(40.0),
+      height: 180,
+      width: 160,
+      decoration: BoxDecoration(
+        color: orange,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          Text("Bebida"),
+          IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.blue,
+                size: 50,
+              ),
+              onPressed: () {})
+        ],
+      ),
     );
   }
 }

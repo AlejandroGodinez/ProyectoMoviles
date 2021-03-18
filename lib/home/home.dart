@@ -25,7 +25,9 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed('/cart');
+            },
           )
         ],
       ),
