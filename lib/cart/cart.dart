@@ -26,14 +26,7 @@ class _CartState extends State<Cart> {
         // automaticallyImplyLeading: false,
         centerTitle: true,
 
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/cart');
-            },
-          )
-        ],
+        actions: <Widget>[],
       ),
       drawer: HomeDrawer(),
       body: BlocProvider(
