@@ -1,8 +1,17 @@
+import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
 
+// import 'bloc/home_bloc.dart';
+
 class ItemCard extends StatefulWidget {
-  ItemCard({Key key}) : super(key: key);
+  final Product prod;
+  final ValueChanged<Product> addToCart;
+  ItemCard({
+    Key key,
+    @required this.prod,
+    @required this.addToCart,
+  }) : super(key: key);
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -21,14 +30,15 @@ class _ItemCardState extends State<ItemCard> {
       ),
       child: Column(
         children: [
-          Text("Bebida"),
+          Text("${widget.prod.idProd}"),
           IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.blue,
-                size: 50,
-              ),
-              onPressed: () {})
+            icon: Icon(
+              Icons.add,
+              color: Colors.blue,
+              size: 50,
+            ),
+            onPressed: () => widget.addToCart(widget.prod),
+          )
         ],
       ),
     );

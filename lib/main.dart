@@ -7,20 +7,21 @@ import 'package:flutter/material.dart';
 
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ProyectoMoviles/model/product.dart';
 
 import 'home/home.dart';
 
 void main() async {
-  // // asegurarnos de iinicializar antes de crear la app
-  // WidgetsFlutterBinding.ensureInitialized();
+  // asegurarnos de inicializar antes de crear la app
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // /// acceder a localstorage
-  // final _localStorage = await getExternalStorageDirectory();
-  // // inicializar Hive pasando path a local storage
-  // Hive
-  //   ..init(_localStorage.path)
-  //   ..registerAdapter(CarritoAdapter());
-  // await Hive.openBox("Carrito");
+  /// acceder a localstorage
+  final _localStorage = await getExternalStorageDirectory();
+  // inicializar Hive pasando path a local storage
+  Hive
+    ..init(_localStorage.path)
+    ..registerAdapter(CarritoAdapter());
+  await Hive.openBox("Carrito");
 
   runApp(MyApp());
 }
