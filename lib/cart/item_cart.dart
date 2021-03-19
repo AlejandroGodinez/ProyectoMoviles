@@ -1,12 +1,16 @@
+import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemCart extends StatefulWidget {
   final Product prod;
+  final int idx;
   ItemCart({
     Key key,
     @required this.prod,
+    @required this.idx,
   }) : super(key: key);
 
   @override
@@ -53,9 +57,10 @@ class _ItemCartState extends State<ItemCart> {
                   left: MediaQuery.of(context).size.width * 0.01),
               alignment: Alignment.centerLeft,
               child: IconButton(
+                splashRadius: 2.0,
                   icon: Icon(Icons.close, color: Colors.white),
                   onPressed: () {
-                    //TODO: implementar borrar del carrito
+                    BlocProvider.of<CartBloc>(context).add(RemoveProductEvent(idx: widget.idx));
                   }),
             ),
             Container(

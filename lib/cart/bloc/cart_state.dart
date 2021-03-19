@@ -18,3 +18,5 @@ class ElementsLoadedState extends CartState {
   @override
   List<Object> get props => [prodsList];
 }
+
+class RemoveProductState extends CartState{}

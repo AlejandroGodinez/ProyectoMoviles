@@ -26,6 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await _cartBox.put("bebidas", newcartElements);
       print(cartElements);
       yield ProductAddedState();
+      yield HomeInitial();
     }
   }
 }

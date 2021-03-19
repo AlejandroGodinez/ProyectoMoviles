@@ -8,3 +8,12 @@ abstract class CartEvent extends Equatable {
 }
 
 class LoadProductsEvent extends CartEvent {}
+
+class RemoveProductEvent extends CartEvent {
+  final int idx;
+
+  RemoveProductEvent({@required this.idx});
+
+  @override
+  List<Object> get props => [idx];
+}

@@ -33,13 +33,14 @@ class _CartState extends State<Cart> {
         create: (context) => CartBloc()..add(LoadProductsEvent()),
         child: BlocConsumer<CartBloc, CartState>(
           listener: (context, state) {
-            if (state is ElementRemovingState) {
+            if (state is RemoveProductState) {
               // show snackbar
+
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    content: Text("Borrando..."),
+                    content: Text("Elemento eliminado..."),
                   ),
                 );
             }
@@ -57,6 +58,7 @@ class _CartState extends State<Cart> {
                         itemBuilder: (BuildContext context, int index) {
                           return ItemCart(
                             prod: state.prodsList[index],
+                            idx: index
                           );
                         },
                       ),
