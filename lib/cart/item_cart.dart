@@ -31,7 +31,7 @@ class _ItemCartState extends State<ItemCart> {
                   borderRadius: BorderRadius.circular(35.0),
                 ),
                 // elevation: 4.0,
-                color: Colors.orange,
+                color: orange
               ),
             ),
             Align(
@@ -57,10 +57,11 @@ class _ItemCartState extends State<ItemCart> {
                   left: MediaQuery.of(context).size.width * 0.01),
               alignment: Alignment.centerLeft,
               child: IconButton(
-                splashRadius: 2.0,
+                  splashRadius: 2.0,
                   icon: Icon(Icons.close, color: Colors.white),
                   onPressed: () {
-                    BlocProvider.of<CartBloc>(context).add(RemoveProductEvent(idx: widget.idx));
+                    BlocProvider.of<CartBloc>(context)
+                        .add(RemoveProductEvent(idx: widget.idx));
                   }),
             ),
             Container(
@@ -73,13 +74,18 @@ class _ItemCartState extends State<ItemCart> {
                   IconButton(
                       icon: Icon(Icons.add_circle, color: Colors.white),
                       onPressed: () {
-                        //TODO: implementar aumentar amount
+                        BlocProvider.of<CartBloc>(context)
+                            .add(IncrementAmountEvent(idx: widget.idx));
                       }),
                   Text("${widget.prod.amount}", style: TextStyle(color: white)),
                   IconButton(
+                      disabledColor: Colors.grey,
                       icon: Icon(Icons.remove_circle, color: Colors.white),
                       onPressed: () {
-                        //TODO: implementar decrementar amount
+                        if (widget.prod.amount > 1) {
+                          BlocProvider.of<CartBloc>(context)
+                              .add(DecrementAmountEvent(idx: widget.idx));
+                        }
                       }),
                 ],
               ),

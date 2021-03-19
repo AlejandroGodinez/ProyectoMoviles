@@ -9,7 +9,7 @@ class Product {
   @HiveField(1)
   final String name;
   @HiveField(2)
-  final int amount;
+  int amount;
   @HiveField(3)
   final double price;
 

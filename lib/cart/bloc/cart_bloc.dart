@@ -34,6 +34,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       if (_prodsList.length != 0) {
         yield ElementsLoadedState(prodsList: _prodsList);
       }
+    } else if (event is IncrementAmountEvent) {
+      _prodsList[event.idx].amount++;
+      await _cartBox.put("bebidas", _prodsList);
+      yield CartInitial();
+      yield ElementsLoadedState(prodsList: _prodsList);
+    } else if (event is DecrementAmountEvent) {
+      _prodsList[event.idx].amount--;
+      await _cartBox.put("bebidas", _prodsList);
+      yield CartInitial();
+      yield ElementsLoadedState(prodsList: _prodsList);
     }
   }
 }

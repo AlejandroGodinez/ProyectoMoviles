@@ -52,19 +52,39 @@ class _CartState extends State<Cart> {
                 child: Column(
                   children: [
                     Expanded(
-                      flex: 3,
+                      flex: 9,
                       child: ListView.builder(
                         itemCount: state.prodsList.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ItemCart(
-                            prod: state.prodsList[index],
-                            idx: index
-                          );
+                              prod: state.prodsList[index], idx: index);
                         },
                       ),
                     ),
                     Expanded(
-                      child: Text('Total'),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.height * 0.02),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.height * 0.2,
+                          height: MediaQuery.of(context).size.height * 0.000005,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(45.0),
+                              ),
+                              backgroundColor: orange,
+                            ),
+                            child: Text(
+                              'Enviar mensaje',
+                              style: TextStyle(
+                                color: white,
+                              ),
+                            ),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
