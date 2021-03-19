@@ -3,6 +3,7 @@ import 'package:ProyectoMoviles/help_page.dart';
 import 'package:ProyectoMoviles/initial/login.dart';
 import 'package:ProyectoMoviles/initial/register_page.dart';
 import 'package:ProyectoMoviles/initial/splashscreen_page.dart';
+import 'package:ProyectoMoviles/product_detail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hive/hive.dart';
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp> {
         '/home': (context) => HomePage(),
         '/help': (context) => HelpPage(),
         '/cart': (context) => Cart(),
+        '/product': (context) => ProductDetail(),
       },
     );
   }

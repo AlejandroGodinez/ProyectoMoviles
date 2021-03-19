@@ -20,27 +20,27 @@ class ItemCard extends StatefulWidget {
 class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(40.0),
-      height: 180,
-      width: 160,
-      decoration: BoxDecoration(
-        color: orange,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          Text("${widget.prod.idProd}"),
-          IconButton(
-            icon: Icon(
-              Icons.add,
-              color: Colors.blue,
-              size: 50,
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.all(40.0),
+        height: 180,
+        width: 160,
+        decoration: BoxDecoration(
+          color: orange,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          children: [
+            Text("${widget.prod.idProd}"),
+            Image.network(
+              "https://cdn.shopify.com/s/files/1/0087/6065/5938/products/green-tea-15-5oz-can_2000x.png?v=1581728927",
             ),
-            onPressed: () => widget.addToCart(widget.prod),
-          )
-        ],
+          ],
+        ),
       ),
+      onTap: (){
+        Navigator.of(context).pushNamed('/product');
+      },
     );
   }
 }
