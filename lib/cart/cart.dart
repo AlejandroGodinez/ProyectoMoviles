@@ -76,7 +76,7 @@ class _CartState extends State<Cart> {
                               backgroundColor: orange,
                             ),
                             child: Text(
-                              'Enviar mensaje',
+                              'Comprar',
                               style: TextStyle(
                                 color: white,
                               ),

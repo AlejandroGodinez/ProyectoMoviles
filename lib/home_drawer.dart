@@ -38,11 +38,23 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ),
             ListTile(
               title: Text(
+                "Inicio",
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+              leading: Icon(Icons.home),
+              onTap: () {
+                Navigator.of(context).pushNamed('/home');
+              },
+            ),
+            ListTile(
+              title: Text(
                 "Mis Pedidos",
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
               leading: Icon(Icons.store),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed('/orders');
+              },
             ),
             ListTile(
               title: Text("Perfil",

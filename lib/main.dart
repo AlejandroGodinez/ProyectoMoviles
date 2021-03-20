@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 
 import 'home/home.dart';
+import 'orders/orders.dart';
 
 void main() async {
   // asegurarnos de inicializar antes de crear la app
@@ -48,6 +49,7 @@ class _MyAppState extends State<MyApp> {
         '/help': (context) => HelpPage(),
         '/cart': (context) => Cart(),
         '/product': (context) => ProductDetail(),
+        '/orders': (context) => Orders(),
       },
     );
   }
