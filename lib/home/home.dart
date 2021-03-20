@@ -18,6 +18,8 @@ class _HomePageState extends State<HomePage> {
   HomeBloc _homeBloc;
   int buttonState = 1;
   List<ItemCard> fakeProds;
+  List<ItemCard> fakeCons;
+  List<ItemCard> fakeFavs;
 
   @override
   void initState() {
@@ -37,6 +39,42 @@ class _HomePageState extends State<HomePage> {
       ),
       ItemCard(
         prod: Product(idProd: "Melon", name: "Melon", amount: 1, price: 10),
+        addToCart: _addProduct,
+      ),
+    ];
+    fakeCons = [
+      ItemCard(
+        prod: Product(idProd: "Cons", name: "Naranjita", amount: 1, price: 5),
+        addToCart: _addProduct,
+      ),
+      ItemCard(
+        prod: Product(idProd: "Cons", name: "Uva", amount: 1, price: 6.5),
+        addToCart: _addProduct,
+      ),
+      ItemCard(
+        prod: Product(idProd: "Cons", name: "Sandia", amount: 1, price: 7),
+        addToCart: _addProduct,
+      ),
+      ItemCard(
+        prod: Product(idProd: "Cons", name: "Melon", amount: 1, price: 10),
+        addToCart: _addProduct,
+      ),
+    ];
+    fakeFavs = [
+      ItemCard(
+        prod: Product(idProd: "Fav", name: "Naranjita", amount: 1, price: 5),
+        addToCart: _addProduct,
+      ),
+      ItemCard(
+        prod: Product(idProd: "Fav", name: "Uva", amount: 1, price: 6.5),
+        addToCart: _addProduct,
+      ),
+      ItemCard(
+        prod: Product(idProd: "Fav", name: "Sandia", amount: 1, price: 7),
+        addToCart: _addProduct,
+      ),
+      ItemCard(
+        prod: Product(idProd: "Fav", name: "Melon", amount: 1, price: 10),
         addToCart: _addProduct,
       ),
     ];
@@ -82,112 +120,132 @@ class _HomePageState extends State<HomePage> {
                 );
             }
           }, builder: (context, state) {
-            return Column(
+            if (state is FavoritesState) {
+              return HomeMain(buttonState: 3, prods: fakeFavs);
+            } else if (state is ConsState) {
+              return HomeMain(buttonState: 2, prods: fakeCons);
+            } else if (state is DrinksState) {
+              return HomeMain(buttonState: 1, prods: fakeProds);
+            }
+            return HomeMain(buttonState: 1, prods: fakeProds);
+          }),
+        ));
+  }
+}
+
+class HomeMain extends StatelessWidget {
+  const HomeMain({
+    Key key,
+    @required this.buttonState,
+    @required this.prods,
+  }) : super(key: key);
+
+  final int buttonState;
+  final List<ItemCard> prods;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              buttonState = 1;
-                            });
-                          },
-                          child: Text(
-                            'Bebidas',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: buttonState == 1
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context)
+                            .add(ShowDrinksEvent());
+                      },
+                      child: Text(
+                        'Bebidas',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: buttonState == 1
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
-                        Container(
-                          height: 2.0,
-                          width: 40.0,
-                          color: buttonState == 1 ? Colors.grey : Colors.white,
-                        ),
-                      ],
+                      ),
                     ),
-                    Column(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              buttonState = 2;
-                            });
-                          },
-                          child: Text(
-                            'Concentrados',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: buttonState == 2
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 2.0,
-                          width: 40.0,
-                          color: buttonState == 2 ? Colors.grey : Colors.white,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              buttonState = 3;
-                            });
-                          },
-                          child: Text(
-                            'Favoritos',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: buttonState == 3
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 2.0,
-                          width: 40.0,
-                          color: buttonState == 3 ? Colors.grey : Colors.white,
-                        ),
-                      ],
+                    Container(
+                      height: 2.0,
+                      width: 40.0,
+                      color: buttonState == 1 ? Colors.grey : Colors.white,
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context).add(ShowConsEvent());
+                      },
+                      child: Text(
+                        'Concentrados',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: buttonState == 2
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 2.0,
+                      width: 40.0,
+                      color: buttonState == 2 ? Colors.grey : Colors.white,
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: GridView.builder(
-                        itemCount: fakeProds.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing:
-                                MediaQuery.of(context).size.height * 0.03,
-                            crossAxisSpacing:
-                                MediaQuery.of(context).size.height * 0.03,
-                            childAspectRatio: 0.8),
-                        itemBuilder: (context, index) => fakeProds[index]),
-                  ),
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context).add(ShowFavsEvent());
+                      },
+                      child: Text(
+                        'Favoritos',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: buttonState == 3
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 2.0,
+                      width: 40.0,
+                      color: buttonState == 3 ? Colors.grey : Colors.white,
+                    ),
+                  ],
                 ),
               ],
-            );
-          }),
-        ));
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.builder(
+                itemCount: prods.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                    crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                    childAspectRatio: 0.8),
+                itemBuilder: (context, index) => prods[index]),
+          ),
+        ),
+      ],
+    );
   }
 }

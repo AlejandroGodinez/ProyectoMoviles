@@ -27,6 +27,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       print(cartElements);
       yield ProductAddedState();
       yield HomeInitial();
+    } else if (event is ShowDrinksEvent) {
+      yield DrinksState();
+    } else if (event is ShowConsEvent) {
+      yield ConsState();
+    } else if (event is ShowFavsEvent) {
+      yield FavoritesState();
     }
   }
 }

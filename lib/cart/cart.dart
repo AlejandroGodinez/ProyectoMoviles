@@ -64,6 +64,7 @@ class _CartState extends State<Cart> {
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.02,
                             bottom: MediaQuery.of(context).size.height * 0.02),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.height * 0.2,

@@ -59,7 +59,9 @@ class _ItemOrderState extends State<ItemOrder> {
                     style: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all<Color>(white),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("/orderDetail");
+                    },
                     icon: Icon(Icons.info),
                     label: Text("detalles")))
           ],

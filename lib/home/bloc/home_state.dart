@@ -13,3 +13,18 @@ class ProductAddedState extends HomeState {
   @override
   List<Object> get props => [];
 }
+
+class FavoritesState extends HomeState {
+  @override
+  List<Object> get props => [];
+}
+
+class ConsState extends HomeState {
+  @override
+  List<Object> get props => [];
+}
+
+class DrinksState extends HomeState {
+  @override
+  List<Object> get props => [];
+}

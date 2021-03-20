@@ -14,3 +14,18 @@ class AddToCartEvent extends HomeEvent {
   @override
   List<Object> get props => [product];
 }
+
+class ShowFavsEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class ShowConsEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class ShowDrinksEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
