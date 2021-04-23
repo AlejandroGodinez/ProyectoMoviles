@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 
 class ItemCard extends StatefulWidget {
   final Product prod;
-  final ValueChanged<Product> addToCart;
+  final bool favoritesList;
   ItemCard({
     Key key,
     @required this.prod,
-    @required this.addToCart,
+    @required this.favoritesList
   }) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _ItemCardState extends State<ItemCard> {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProductDetail(
                   product: widget.prod,
-
+                  favoritesList: widget.favoritesList,
                 )));
       },
     );

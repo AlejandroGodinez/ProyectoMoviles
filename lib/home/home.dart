@@ -1,3 +1,4 @@
+import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
 import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/home_drawer.dart';
 import 'package:ProyectoMoviles/model/product.dart';
@@ -17,72 +18,79 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   HomeBloc _homeBloc;
   int buttonState = 1;
-  List<ItemCard> fakeProds;
-  List<ItemCard> fakeCons;
-  List<ItemCard> fakeFavs;
+  List<Product> fakeProds;
+  List<Product> fakeCons;
+  List<Product> favsList;
 
   @override
   void initState() {
     fakeProds = [
-      ItemCard(
-        prod: Product(
-            idProd: "Naranjita", name: "Naranjita", amount: 1, price: 5, type: 'Bebida'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Uva", name: "Uva", amount: 1, price: 6.5, type: 'Bebida'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Sandia", name: "Sandia", amount: 1, price: 7, type: 'Bebida'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Melon", name: "Melon", amount: 1, price: 10, type: 'Bebida'),
-        addToCart: _addProduct,
-      ),
+      Product(
+          idProd: "Naranjita",
+          name: "Naranjita",
+          amount: 1,
+          price: 5,
+          type: 'Bebida'),
+      Product(
+          idProd: "Uva", name: "Uva", amount: 1, price: 6.5, type: 'Bebida'),
+      Product(
+          idProd: "Sandia",
+          name: "Sandia",
+          amount: 1,
+          price: 7,
+          type: 'Bebida'),
+      Product(
+          idProd: "Melon", name: "Melon", amount: 1, price: 10, type: 'Bebida'),
     ];
     fakeCons = [
-      ItemCard(
-        prod: Product(idProd: "Cons", name: "Naranjita", amount: 1, price: 5, type: 'Concentrado'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Cons", name: "Uva", amount: 1, price: 6.5, type: 'Concentrado'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Cons", name: "Sandia", amount: 1, price: 7, type: 'Concentrado'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Cons", name: "Melon", amount: 1, price: 10, type: 'Concentrado'),
-        addToCart: _addProduct,
-      ),
+      Product(
+          idProd: "Cons",
+          name: "Naranjita",
+          amount: 1,
+          price: 5,
+          type: 'Concentrado'),
+      Product(
+          idProd: "Cons",
+          name: "Uva",
+          amount: 1,
+          price: 6.5,
+          type: 'Concentrado'),
+      Product(
+          idProd: "Cons",
+          name: "Sandia",
+          amount: 1,
+          price: 7,
+          type: 'Concentrado'),
+      Product(
+          idProd: "Cons",
+          name: "Melon",
+          amount: 1,
+          price: 10,
+          type: 'Concentrado'),
     ];
-    fakeFavs = [
-      ItemCard(
-        prod: Product(idProd: "Fav", name: "Naranjita", amount: 1, price: 5, type: 'Bebida'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Fav", name: "Uva", amount: 1, price: 6.5, type: 'Concentrado'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Fav", name: "Sandia", amount: 1, price: 7, type: 'Bebida'),
-        addToCart: _addProduct,
-      ),
-      ItemCard(
-        prod: Product(idProd: "Fav", name: "Melon", amount: 1, price: 10, type: 'Concentrado'),
-        addToCart: _addProduct,
-      ),
-    ];
+    // fakeFavs = [
+    //   Product(
+    //       idProd: "Fav",
+    //       name: "Naranjita",
+    //       amount: 1,
+    //       price: 5,
+    //       type: 'Bebida'),
+    //   Product(
+    //       idProd: "Fav",
+    //       name: "Uva",
+    //       amount: 1,
+    //       price: 6.5,
+    //       type: 'Concentrado'),
+    //   Product(
+    //       idProd: "Fav", name: "Sandia", amount: 1, price: 7, type: 'Bebida'),
+    //   Product(
+    //       idProd: "Fav",
+    //       name: "Melon",
+    //       amount: 1,
+    //       price: 10,
+    //       type: 'Concentrado'),
+    // ];
     super.initState();
-  }
-
-  void _addProduct(Product prod) {
-    _homeBloc.add(AddToCartEvent(product: prod));
   }
 
   @override
@@ -105,10 +113,7 @@ class _HomePageState extends State<HomePage> {
         ),
         drawer: HomeDrawer(),
         body: BlocProvider(
-          create: (context) {
-            _homeBloc = HomeBloc();
-            return _homeBloc;
-          },
+          create: (context) => HomeBloc()..add(InitialEvent()),
           child: BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
             if (state is ProductAddedState) {
               ScaffoldMessenger.of(context)
@@ -119,15 +124,20 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
             }
-          }, builder: (context, state) {
-            if (state is FavoritesState) {
-              return HomeMain(buttonState: 3, prods: fakeFavs);
-            } else if (state is ConsState) {
-              return HomeMain(buttonState: 2, prods: fakeCons);
-            } else if (state is DrinksState) {
-              return HomeMain(buttonState: 1, prods: fakeProds);
+            if (state is LoadedProductsState) {
+              favsList = state.favoritos;
             }
-            return HomeMain(buttonState: 1, prods: fakeProds);
+          }, builder: (context, state) {
+            print(favsList);
+            if (state is FavoritesState) {
+              return HomeMain(
+                  buttonState: 3, prods: state.product, favs: favsList);
+            } else if (state is ConsState) {
+              return HomeMain(buttonState: 2, prods: fakeCons, favs: favsList);
+            } else if (state is DrinksState) {
+              return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
+            }
+            return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
           }),
         ));
   }
@@ -138,10 +148,12 @@ class HomeMain extends StatelessWidget {
     Key key,
     @required this.buttonState,
     @required this.prods,
+    @required this.favs,
   }) : super(key: key);
 
   final int buttonState;
-  final List<ItemCard> prods;
+  final List<Product> prods;
+  final List<Product> favs;
 
   @override
   Widget build(BuildContext context) {
@@ -236,13 +248,19 @@ class HomeMain extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: GridView.builder(
-                itemCount: prods.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                    crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                    childAspectRatio: 0.8),
-                itemBuilder: (context, index) => prods[index]),
+              itemCount: prods.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                  crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                  childAspectRatio: 0.8),
+              itemBuilder: (context, index) => ItemCard(
+                prod: prods[index],
+                favoritesList: favs.contains(
+                  prods[index],
+                ),
+              ),
+            ),
           ),
         ),
       ],

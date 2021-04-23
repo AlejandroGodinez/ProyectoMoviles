@@ -12,14 +12,18 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   // referencia a la box previamente abierta (en el main)
   Box _cartBox = Hive.box("Carrito");
-
+  Box _favBox = Hive.box("Favoritos");
   HomeBloc() : super(HomeInitial());
   List<Product> carrito = [];
+  List<Product> favoritos = [];
   @override
   Stream<HomeState> mapEventToState(
     HomeEvent event,
   ) async* {
-    if (event is AddToCartEvent) {
+    if(event is InitialEvent){
+      List<Product> favoritos = List<Product>.from(_favBox.get("favoritos", defaultValue: []));
+      yield LoadedProductsState(favoritos: favoritos);
+    } else if (event is AddToCartEvent) {
       //carrito.add(event.product);
       var cartElements = _cartBox.get("bebidas", defaultValue: []);
       List<dynamic> newcartElements = cartElements + [event.product];
@@ -32,7 +36,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else if (event is ShowConsEvent) {
       yield ConsState();
     } else if (event is ShowFavsEvent) {
-      yield FavoritesState();
+      favoritos = List<Product>.from(_favBox.get("favoritos", defaultValue: []));
+      print(favoritos);
+      yield FavoritesState(product: favoritos);
+    } else if(event is AddFavoriteEvent){
+      var favElements = _favBox.get("favoritos", defaultValue: []);
+      List<dynamic> newFavElements = favElements + [event.product];
+      await _favBox.put("favoritos", newFavElements);
+      yield FavoriteAddedState();
     }
   }
 }

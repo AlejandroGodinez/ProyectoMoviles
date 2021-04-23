@@ -6,7 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
-  ProductDetail({Key key, @required this.product}) : super(key: key);
+  final bool favoritesList;
+  ProductDetail({
+    Key key,
+    @required this.product,
+    @required this.favoritesList
+  }) : super(key: key);
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
@@ -25,6 +30,10 @@ class _ProductDetailState extends State<ProductDetail> {
           return ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(content: Text("Añadiendo al carrito...")));
+        } else if (state is FavoriteAddedState) {
+          return ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text("Añadiendo a favoritos...")));
         }
       }, builder: (context, state) {
         return Scaffold(
@@ -186,7 +195,8 @@ class _ProductDetailState extends State<ProductDetail> {
                       color: white,
                     ),
                     onPressed: () {
-                      //TODO: agregar a favoritos
+                      BlocProvider.of<HomeBloc>(context)
+                          .add(AddFavoriteEvent(product: widget.product));
                     },
                   ),
                 ),
@@ -205,6 +215,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           iconSize: 40.0,
                           icon: Icon(Icons.add_shopping_cart),
                           onPressed: () {
+                            print(widget.favoritesList);
                             BlocProvider.of<HomeBloc>(context)
                                 .add(AddToCartEvent(product: widget.product));
                           },
