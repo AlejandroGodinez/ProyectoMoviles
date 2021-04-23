@@ -1,4 +1,5 @@
 import 'package:ProyectoMoviles/model/product.dart';
+import 'package:ProyectoMoviles/product_detail.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -38,8 +39,12 @@ class _ItemCardState extends State<ItemCard> {
           ],
         ),
       ),
-      onTap: (){
-        Navigator.of(context).pushNamed('/product');
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProductDetail(
+                  product: widget.prod,
+
+                )));
       },
     );
   }

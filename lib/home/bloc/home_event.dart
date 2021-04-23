@@ -29,3 +29,8 @@ class ShowDrinksEvent extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+class InitialEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}

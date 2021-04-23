@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         '/home': (context) => HomePage(),
         '/help': (context) => HelpPage(),
         '/cart': (context) => Cart(),
-        '/product': (context) => ProductDetail(),
+        // '/product': (context) => ProductDetail(),
         '/orders': (context) => Orders(),
         '/orderDetail': (context) => OrderDetails(),
       },

@@ -26,55 +26,55 @@ class _HomePageState extends State<HomePage> {
     fakeProds = [
       ItemCard(
         prod: Product(
-            idProd: "Naranjita", name: "Naranjita", amount: 1, price: 5),
+            idProd: "Naranjita", name: "Naranjita", amount: 1, price: 5, type: 'Bebida'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Uva", name: "Uva", amount: 1, price: 6.5),
+        prod: Product(idProd: "Uva", name: "Uva", amount: 1, price: 6.5, type: 'Bebida'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Sandia", name: "Sandia", amount: 1, price: 7),
+        prod: Product(idProd: "Sandia", name: "Sandia", amount: 1, price: 7, type: 'Bebida'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Melon", name: "Melon", amount: 1, price: 10),
+        prod: Product(idProd: "Melon", name: "Melon", amount: 1, price: 10, type: 'Bebida'),
         addToCart: _addProduct,
       ),
     ];
     fakeCons = [
       ItemCard(
-        prod: Product(idProd: "Cons", name: "Naranjita", amount: 1, price: 5),
+        prod: Product(idProd: "Cons", name: "Naranjita", amount: 1, price: 5, type: 'Concentrado'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Cons", name: "Uva", amount: 1, price: 6.5),
+        prod: Product(idProd: "Cons", name: "Uva", amount: 1, price: 6.5, type: 'Concentrado'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Cons", name: "Sandia", amount: 1, price: 7),
+        prod: Product(idProd: "Cons", name: "Sandia", amount: 1, price: 7, type: 'Concentrado'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Cons", name: "Melon", amount: 1, price: 10),
+        prod: Product(idProd: "Cons", name: "Melon", amount: 1, price: 10, type: 'Concentrado'),
         addToCart: _addProduct,
       ),
     ];
     fakeFavs = [
       ItemCard(
-        prod: Product(idProd: "Fav", name: "Naranjita", amount: 1, price: 5),
+        prod: Product(idProd: "Fav", name: "Naranjita", amount: 1, price: 5, type: 'Bebida'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Fav", name: "Uva", amount: 1, price: 6.5),
+        prod: Product(idProd: "Fav", name: "Uva", amount: 1, price: 6.5, type: 'Concentrado'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Fav", name: "Sandia", amount: 1, price: 7),
+        prod: Product(idProd: "Fav", name: "Sandia", amount: 1, price: 7, type: 'Bebida'),
         addToCart: _addProduct,
       ),
       ItemCard(
-        prod: Product(idProd: "Fav", name: "Melon", amount: 1, price: 10),
+        prod: Product(idProd: "Fav", name: "Melon", amount: 1, price: 10, type: 'Concentrado'),
         addToCart: _addProduct,
       ),
     ];

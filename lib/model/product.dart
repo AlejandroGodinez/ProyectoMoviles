@@ -12,10 +12,13 @@ class Product {
   int amount;
   @HiveField(3)
   final double price;
+  @HiveField(4)
+  final String type;
 
   Product(
       {@required this.idProd,
       @required this.name,
       @required this.amount,
-      @required this.price});
+      @required this.price,
+      @required this.type});
 }
