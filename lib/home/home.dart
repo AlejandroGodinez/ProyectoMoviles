@@ -41,6 +41,8 @@ class _HomePageState extends State<HomePage> {
           type: 'Bebida'),
       Product(
           idProd: "Melon", name: "Melon", amount: 1, price: 10, type: 'Bebida'),
+      Product(
+          idProd: "Chile", name: "Chile", amount: 1, price: 10, type: 'Bebida'),
     ];
     fakeCons = [
       Product(
@@ -127,6 +129,9 @@ class _HomePageState extends State<HomePage> {
             if (state is LoadedProductsState) {
               favsList = state.favoritos;
             }
+            if (state is FavoritesState) {
+              favsList = state.product;
+            }
           }, builder: (context, state) {
             print(favsList);
             if (state is FavoritesState) {
@@ -157,113 +162,123 @@ class HomeMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        BlocProvider.of<HomeBloc>(context)
-                            .add(ShowDrinksEvent());
-                      },
-                      child: Text(
-                        'Bebidas',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: buttonState == 1
-                              ? FontWeight.bold
-                              : FontWeight.normal,
+    if (prods.length != 0) {
+      return Column(
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(ShowDrinksEvent());
+                        },
+                        child: Text(
+                          'Bebidas',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: buttonState == 1
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 2.0,
-                      width: 40.0,
-                      color: buttonState == 1 ? Colors.grey : Colors.white,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        BlocProvider.of<HomeBloc>(context).add(ShowConsEvent());
-                      },
-                      child: Text(
-                        'Concentrados',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: buttonState == 2
-                              ? FontWeight.bold
-                              : FontWeight.normal,
+                      Container(
+                        height: 2.0,
+                        width: 40.0,
+                        color: buttonState == 1 ? Colors.grey : Colors.white,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(ShowConsEvent());
+                        },
+                        child: Text(
+                          'Concentrados',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: buttonState == 2
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 2.0,
-                      width: 40.0,
-                      color: buttonState == 2 ? Colors.grey : Colors.white,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        BlocProvider.of<HomeBloc>(context).add(ShowFavsEvent());
-                      },
-                      child: Text(
-                        'Favoritos',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: buttonState == 3
-                              ? FontWeight.bold
-                              : FontWeight.normal,
+                      Container(
+                        height: 2.0,
+                        width: 40.0,
+                        color: buttonState == 2 ? Colors.grey : Colors.white,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          BlocProvider.of<HomeBloc>(context)
+                              .add(ShowFavsEvent());
+                        },
+                        child: Text(
+                          'Favoritos',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: buttonState == 3
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 2.0,
-                      width: 40.0,
-                      color: buttonState == 3 ? Colors.grey : Colors.white,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: GridView.builder(
-              itemCount: prods.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                  crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                  childAspectRatio: 0.8),
-              itemBuilder: (context, index) => ItemCard(
-                prod: prods[index],
-                favoritesList: favs.contains(
-                  prods[index],
+                      Container(
+                        height: 2.0,
+                        width: 40.0,
+                        color: buttonState == 3 ? Colors.grey : Colors.white,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: GridView.builder(
+                itemCount: prods.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                    crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
+                    childAspectRatio: 0.8),
+                itemBuilder: (context, index) => ItemCard(
+                  prod: prods[index],
+                  favoritesList: favs != null
+                      ? favs.contains(
+                          prods[index],
+                        )
+                      : false,
                 ),
               ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    } else {
+      return Center(
+        child: Text("Todavía no tienes favoritos"),
+      );
+    }
   }
 }

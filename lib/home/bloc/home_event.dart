@@ -23,6 +23,14 @@ class AddFavoriteEvent extends HomeEvent {
   List<Object> get props => [product];
 }
 
+class DeleteFavoriteEvent extends HomeEvent {
+  final Product product;
+
+  DeleteFavoriteEvent({@required this.product});
+  @override
+  List<Object> get props => [product];
+}
+
 class ShowFavsEvent extends HomeEvent {
   @override
   List<Object> get props => [];
@@ -42,5 +50,3 @@ class InitialEvent extends HomeEvent {
   @override
   List<Object> get props => [];
 }
-
-

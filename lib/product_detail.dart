@@ -6,12 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
-  final bool favoritesList;
-  ProductDetail({
-    Key key,
-    @required this.product,
-    @required this.favoritesList
-  }) : super(key: key);
+  bool favoritesList;
+  ProductDetail({Key key, @required this.product, @required this.favoritesList})
+      : super(key: key);
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
@@ -34,6 +31,12 @@ class _ProductDetailState extends State<ProductDetail> {
           return ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(content: Text("Añadiendo a favoritos...")));
+        }
+        if (state is FavoriteDeletedState) {
+          return ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+                SnackBar(content: Text("Eliminando de favoritos...")));
         }
       }, builder: (context, state) {
         return Scaffold(
@@ -183,24 +186,6 @@ class _ProductDetailState extends State<ProductDetail> {
                       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'),
                 ),
                 Container(
-                  alignment: Alignment.bottomRight,
-                  margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.65,
-                  ),
-                  child: MaterialButton(
-                    shape: CircleBorder(),
-                    color: Colors.red,
-                    child: Icon(
-                      Icons.favorite_rounded,
-                      color: white,
-                    ),
-                    onPressed: () {
-                      BlocProvider.of<HomeBloc>(context)
-                          .add(AddFavoriteEvent(product: widget.product));
-                    },
-                  ),
-                ),
-                Container(
                   alignment: Alignment.bottomCenter,
                   margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.72,
@@ -210,6 +195,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     height: MediaQuery.of(context).size.height * 0.09,
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
                           iconSize: 40.0,
@@ -220,9 +206,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                 .add(AddToCartEvent(product: widget.product));
                           },
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.height * 0.28,
-                          height: MediaQuery.of(context).size.height * 0.09,
+                        SizedBox(
+                            width: MediaQuery.of(context).size.height * 0.02),
+                        Expanded(
                           child: TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -231,7 +217,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               backgroundColor: orange,
                             ),
                             child: Text(
-                              'COMPRARR',
+                              'COMPRAR',
                               style: TextStyle(
                                 color: white,
                               ),
@@ -240,6 +226,25 @@ class _ProductDetailState extends State<ProductDetail> {
                               //TODO: ir a la ventana de compra de producto
                             },
                           ),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.height * 0.02),
+                        IconButton(
+                          iconSize: 40.0,
+                          icon: widget.favoritesList
+                              ? Icon(Icons.favorite_outlined)
+                              : Icon(Icons.favorite_border_outlined),
+                          onPressed: () {
+                            //TODO: actualizar bien los favoritos
+                            widget.favoritesList = !widget.favoritesList;
+                            widget.favoritesList
+                                ? BlocProvider.of<HomeBloc>(context).add(
+                                    AddFavoriteEvent(product: widget.product))
+                                : BlocProvider.of<HomeBloc>(context).add(
+                                    DeleteFavoriteEvent(
+                                        product: widget.product));
+                            setState(() {});
+                          },
                         ),
                       ],
                     ),

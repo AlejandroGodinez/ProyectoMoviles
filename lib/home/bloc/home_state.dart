@@ -15,6 +15,13 @@ class ProductAddedState extends HomeState {
 }
 
 class FavoriteAddedState extends HomeState {
+  final List<Product> favorites;
+  FavoriteAddedState({@required this.favorites});
+  @override
+  List<Object> get props => [];
+}
+
+class FavoriteDeletedState extends HomeState {
   @override
   List<Object> get props => [];
 }
@@ -37,15 +44,13 @@ class DrinksState extends HomeState {
   List<Object> get props => [];
 }
 
-class LoadedProductsState extends HomeState{
+class LoadedProductsState extends HomeState {
   // final List<Product> bebidas;
   // final List<Product> concentrados;
   final List<Product> favoritos;
 
-  LoadedProductsState({
-    @required this.favoritos
-  });
+  LoadedProductsState({@required this.favoritos});
 
-  @override 
+  @override
   List<Object> get props => [favoritos];
 }

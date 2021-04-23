@@ -20,8 +20,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapEventToState(
     HomeEvent event,
   ) async* {
-    if(event is InitialEvent){
-      List<Product> favoritos = List<Product>.from(_favBox.get("favoritos", defaultValue: []));
+    if (event is InitialEvent) {
+      List<Product> favoritos =
+          List<Product>.from(_favBox.get("favoritos", defaultValue: []));
       yield LoadedProductsState(favoritos: favoritos);
     } else if (event is AddToCartEvent) {
       //carrito.add(event.product);
@@ -36,14 +37,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else if (event is ShowConsEvent) {
       yield ConsState();
     } else if (event is ShowFavsEvent) {
-      favoritos = List<Product>.from(_favBox.get("favoritos", defaultValue: []));
+      favoritos =
+          List<Product>.from(_favBox.get("favoritos", defaultValue: []));
       print(favoritos);
       yield FavoritesState(product: favoritos);
-    } else if(event is AddFavoriteEvent){
+    } else if (event is AddFavoriteEvent) {
       var favElements = _favBox.get("favoritos", defaultValue: []);
       List<dynamic> newFavElements = favElements + [event.product];
       await _favBox.put("favoritos", newFavElements);
-      yield FavoriteAddedState();
+      yield FavoriteAddedState(favorites: favoritos);
+      yield HomeInitial();
+    } else if (event is DeleteFavoriteEvent) {
+      List<Product> favElements =
+          List<Product>.from(_favBox.get("favoritos", defaultValue: []));
+      favElements.remove(event.product);
+      List<dynamic> newFavElements = favElements;
+      await _favBox.put("favoritos", newFavElements);
+      yield FavoriteDeletedState();
+      yield HomeInitial();
     }
   }
 }
