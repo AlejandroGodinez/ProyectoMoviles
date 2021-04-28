@@ -4,19 +4,22 @@ import 'package:ProyectoMoviles/initial/login.dart';
 import 'package:ProyectoMoviles/initial/register_page.dart';
 import 'package:ProyectoMoviles/initial/splashscreen_page.dart';
 import 'package:ProyectoMoviles/orders/orders_details.dart';
-import 'package:ProyectoMoviles/product_detail.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 
+import 'bloc/auth_bloc.dart';
 import 'home/home.dart';
 import 'orders/orders.dart';
 
 void main() async {
   // asegurarnos de inicializar antes de crear la app
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   /// acceder a localstorage
   final _localStorage = await getExternalStorageDirectory();
@@ -27,7 +30,12 @@ void main() async {
   await Hive.openBox("Carrito");
   await Hive.openBox("Favoritos");
 
-  runApp(MyApp());
+  runApp(
+    BlocProvider(
+      create: (context) => AuthBloc()..add(VerifyAuthenticationEvent()),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -43,7 +51,17 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material app',
-      home: SplashScreenPage(),
+      home: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is AlreadyAuthState) {
+            return HomePage();
+          }
+          if (state is UnAuthState) {
+            return SplashScreenPage();
+          }
+          return SplashScreenPage();
+        },
+      ),
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),

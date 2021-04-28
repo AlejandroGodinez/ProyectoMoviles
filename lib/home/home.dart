@@ -1,4 +1,3 @@
-import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
 import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/home_drawer.dart';
 import 'package:ProyectoMoviles/model/product.dart';
@@ -145,47 +144,50 @@ class _HomePageState extends State<HomePage> {
       box: Hive.box("Favoritos"),
       keys: ["favoritos"],
       builder: (box) {
-        return Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.grey),
-            backgroundColor: white,
-            // automaticallyImplyLeading: false,
-            centerTitle: true,
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          child: Scaffold(
+            appBar: AppBar(
+              iconTheme: IconThemeData(color: Colors.grey),
+              backgroundColor: white,
+              // automaticallyImplyLeading: false,
+              centerTitle: true,
 
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/cart');
-                },
-              )
-            ],
-          ),
-          drawer: HomeDrawer(),
-          body: BlocProvider(
-            create: (context) => HomeBloc()..add(InitialEvent()),
-            child:
-                BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
-              if (state is LoadedProductsState) {
-                // drinksList = state.bebidas;
-                // consList = state.concentrados;
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/cart');
+                  },
+                )
+              ],
+            ),
+            drawer: HomeDrawer(),
+            body: BlocProvider(
+              create: (context) => HomeBloc()..add(InitialEvent()),
+              child:
+                  BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
+                if (state is LoadedProductsState) {
+                  // drinksList = state.bebidas;
+                  // consList = state.concentrados;
 
-              }
-            }, builder: (context, state) {
-              favsList =
-                  List<Product>.from(box.get("favoritos", defaultValue: []));
-              if (state is FavoritesState) {
-                return HomeMain(
-                    buttonState: 3, prods: favsList, favs: favsList);
-              } else if (state is ConsState) {
-                return HomeMain(
-                    buttonState: 2, prods: fakeCons, favs: favsList);
-              } else if (state is DrinksState) {
-                return HomeMain(
-                    buttonState: 1, prods: fakeProds, favs: favsList);
-              }
-              return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
-            }),
+                }
+              }, builder: (context, state) {
+                favsList =
+                    List<Product>.from(box.get("favoritos", defaultValue: []));
+                if (state is FavoritesState) {
+                  return HomeMain(
+                      buttonState: 3, prods: favsList, favs: favsList);
+                } else if (state is ConsState) {
+                  return HomeMain(
+                      buttonState: 2, prods: fakeCons, favs: favsList);
+                } else if (state is DrinksState) {
+                  return HomeMain(
+                      buttonState: 1, prods: fakeProds, favs: favsList);
+                }
+                return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
+              }),
+            ),
           ),
         );
       },

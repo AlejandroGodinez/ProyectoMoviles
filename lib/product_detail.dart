@@ -241,7 +241,6 @@ class _ProductDetailState extends State<ProductDetail> {
                               ? Icon(Icons.favorite_outlined)
                               : Icon(Icons.favorite_border_outlined),
                           onPressed: () {
-                            //TODO: actualizar bien los favoritos
                             widget.isfavorite = !widget.isfavorite;
                             widget.isfavorite
                                 ? BlocProvider.of<HomeBloc>(context)
