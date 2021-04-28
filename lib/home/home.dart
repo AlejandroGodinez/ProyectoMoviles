@@ -216,120 +216,124 @@ class HomeMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (prods.length != 0) {
-      return Column(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          BlocProvider.of<HomeBloc>(context)
-                              .add(ShowDrinksEvent());
-                        },
-                        child: Text(
-                          'Bebidas',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: buttonState == 1
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 40.0,
-                        color: buttonState == 1 ? Colors.grey : Colors.white,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          BlocProvider.of<HomeBloc>(context)
-                              .add(ShowConsEvent());
-                        },
-                        child: Text(
-                          'Concentrados',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: buttonState == 2
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 40.0,
-                        color: buttonState == 2 ? Colors.grey : Colors.white,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          BlocProvider.of<HomeBloc>(context)
-                              .add(ShowFavsEvent());
-                        },
-                        child: Text(
-                          'Favoritos',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: buttonState == 3
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 2.0,
-                        width: 40.0,
-                        color: buttonState == 3 ? Colors.grey : Colors.white,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: GridView.builder(
-                itemCount: prods.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                    crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
-                    childAspectRatio: 0.8),
-                itemBuilder: (context, index) => ItemCard(
-                    prod: prods[index],
-                    isfavorite: alreadyFavorite(favs, prods[index])),
-              ),
+    // if (prods.length != 0) {
+    return Column(
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              height: 10,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context)
+                            .add(ShowDrinksEvent());
+                      },
+                      child: Text(
+                        'Bebidas',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: buttonState == 1
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 2.0,
+                      width: 40.0,
+                      color: buttonState == 1 ? Colors.grey : Colors.white,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context).add(ShowConsEvent());
+                      },
+                      child: Text(
+                        'Concentrados',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: buttonState == 2
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 2.0,
+                      width: 40.0,
+                      color: buttonState == 2 ? Colors.grey : Colors.white,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        BlocProvider.of<HomeBloc>(context).add(ShowFavsEvent());
+                      },
+                      child: Text(
+                        'Favoritos',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: buttonState == 3
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 2.0,
+                      width: 40.0,
+                      color: buttonState == 3 ? Colors.grey : Colors.white,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: prods.length != 0
+                ? GridView.builder(
+                    itemCount: prods.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing:
+                            MediaQuery.of(context).size.height * 0.03,
+                        crossAxisSpacing:
+                            MediaQuery.of(context).size.height * 0.03,
+                        childAspectRatio: 0.8),
+                    itemBuilder: (context, index) => ItemCard(
+                        prod: prods[index],
+                        isfavorite: alreadyFavorite(favs, prods[index])),
+                  )
+                : Center(
+                    child: Text("Todavía no tienes favoritos"),
+                  ),
           ),
-        ],
-      );
-    } else {
-      return Center(
-        child: Text("Todavía no tienes favoritos"),
-      );
-    }
+        ),
+      ],
+    );
   }
+  //  else {
+  //   return Center(
+  //     child: Text("Todavía no tienes favoritos"),
+  //   );
+  // }
 
   bool alreadyFavorite(List<Product> list, Product product) {
     Product found = list.firstWhere(
