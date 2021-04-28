@@ -18,21 +18,27 @@ class ItemCart extends StatefulWidget {
 }
 
 class _ItemCartState extends State<ItemCart> {
+  double selectedPrice;
+
   @override
   Widget build(BuildContext context) {
+    selectedPrice = widget.prod.size == "Chico"
+        ? widget.prod.priceCh
+        : widget.prod.size == "Mediano"
+        ? widget.prod.priceM
+        : widget.prod.priceG;
     return Container(
-        height: 200,
+        height: 170,
         child: Stack(
           children: [
             Positioned.fill(
               top: 90,
               child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(35.0),
-                ),
-                // elevation: 4.0,
-                color: orange
-              ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(35.0),
+                  ),
+                  // elevation: 4.0,
+                  color: orange),
             ),
             Align(
               alignment: Alignment.topLeft,
@@ -44,11 +50,22 @@ class _ItemCartState extends State<ItemCart> {
             ),
             Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.08,
-                  left: MediaQuery.of(context).size.width * 0.35),
-              child: Text(
-                '${widget.prod.idProd}',
-                style: TextStyle(fontSize: 25),
+                top: MediaQuery.of(context).size.height * 0.06,
+                left: MediaQuery.of(context).size.width * 0.33,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${widget.prod.name}',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    '${widget.prod.size}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -72,13 +89,6 @@ class _ItemCartState extends State<ItemCart> {
               child: Row(
                 children: [
                   IconButton(
-                      icon: Icon(Icons.add_circle, color: Colors.white),
-                      onPressed: () {
-                        BlocProvider.of<CartBloc>(context)
-                            .add(IncrementAmountEvent(idx: widget.idx));
-                      }),
-                  Text("${widget.prod.amount}", style: TextStyle(color: white)),
-                  IconButton(
                       disabledColor: Colors.grey,
                       icon: Icon(Icons.remove_circle, color: Colors.white),
                       onPressed: () {
@@ -86,6 +96,13 @@ class _ItemCartState extends State<ItemCart> {
                           BlocProvider.of<CartBloc>(context)
                               .add(DecrementAmountEvent(idx: widget.idx));
                         }
+                      }),
+                  Text("${widget.prod.amount}", style: TextStyle(color: white)),
+                  IconButton(
+                      icon: Icon(Icons.add_circle, color: Colors.white),
+                      onPressed: () {
+                        BlocProvider.of<CartBloc>(context)
+                            .add(IncrementAmountEvent(idx: widget.idx));
                       }),
                 ],
               ),
@@ -95,7 +112,7 @@ class _ItemCartState extends State<ItemCart> {
                     top: MediaQuery.of(context).size.height * 0.11,
                     left: MediaQuery.of(context).size.width * 0.7),
                 alignment: Alignment.centerLeft,
-                child: Text("\$${widget.prod.amount * widget.prod.price}",
+                child: Text("\$${widget.prod.amount * selectedPrice}",
                     style: TextStyle(
                         color: white,
                         fontSize: 25,

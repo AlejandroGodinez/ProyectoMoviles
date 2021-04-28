@@ -23,7 +23,7 @@ void main() async {
   // inicializar Hive pasando path a local storage
   Hive
     ..init(_localStorage.path)
-    ..registerAdapter(CarritoAdapter());
+    ..registerAdapter(ProductAdapter());
   await Hive.openBox("Carrito");
   await Hive.openBox("Favoritos");
 

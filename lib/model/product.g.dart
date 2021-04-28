@@ -6,7 +6,7 @@ part of 'product.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CarritoAdapter extends TypeAdapter<Product> {
+class ProductAdapter extends TypeAdapter<Product> {
   @override
   final int typeId = 1;
 
@@ -20,15 +20,18 @@ class CarritoAdapter extends TypeAdapter<Product> {
       idProd: fields[0] as String,
       name: fields[1] as String,
       amount: fields[2] as int,
-      price: fields[3] as double,
-      type: fields[4] as String,
+      size: fields[3] as String,
+      priceCh: fields[4] as double,
+      priceM: fields[5] as double,
+      priceG: fields[6] as double,
+      type: fields[7] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.idProd)
       ..writeByte(1)
@@ -36,8 +39,14 @@ class CarritoAdapter extends TypeAdapter<Product> {
       ..writeByte(2)
       ..write(obj.amount)
       ..writeByte(3)
-      ..write(obj.price)
+      ..write(obj.size)
       ..writeByte(4)
+      ..write(obj.priceCh)
+      ..writeByte(5)
+      ..write(obj.priceM)
+      ..writeByte(6)
+      ..write(obj.priceG)
+      ..writeByte(7)
       ..write(obj.type);
   }
 
@@ -47,7 +56,7 @@ class CarritoAdapter extends TypeAdapter<Product> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CarritoAdapter &&
+      other is ProductAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -15,7 +15,7 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
-  int size = 0;
+  String size = "Chico";
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -75,7 +75,11 @@ class _ProductDetailState extends State<ProductDetail> {
                         Padding(
                           padding: const EdgeInsets.only(top: 30.0),
                           child: Text(
-                            '\$${widget.product.price}',
+                            size == "Chico"
+                                ? '\$${widget.product.priceCh}'
+                                : size == "Mediano"
+                                ? '\$${widget.product.priceM}'
+                                : '\$${widget.product.priceG}',
                             style: TextStyle(color: white, fontSize: 40.0),
                           ),
                         ),
@@ -137,40 +141,41 @@ class _ProductDetailState extends State<ProductDetail> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              size = 0;
+                              size = "Chico";
                             });
                           },
                           child: Text(
                             'CH',
                             style: TextStyle(
                                 fontSize: 20.0,
-                                color: size == 0 ? orange : Colors.grey),
+                                color: size == "Chico" ? orange : Colors.grey),
                           ),
                         ),
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              size = 1;
+                              size = "Mediano";
                             });
                           },
                           child: Text(
                             'M',
                             style: TextStyle(
                                 fontSize: 20.0,
-                                color: size == 1 ? orange : Colors.grey),
+                                color:
+                                    size == "Mediano" ? orange : Colors.grey),
                           ),
                         ),
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              size = 2;
+                              size = "Grande";
                             });
                           },
                           child: Text(
                             'G',
                             style: TextStyle(
                                 fontSize: 20.0,
-                                color: size == 2 ? orange : Colors.grey),
+                                color: size == "Grande" ? orange : Colors.grey),
                           ),
                         ),
                       ],
@@ -201,6 +206,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           iconSize: 40.0,
                           icon: Icon(Icons.add_shopping_cart),
                           onPressed: () {
+                            widget.product.size = size;
                             print(widget.favoritesList);
                             BlocProvider.of<HomeBloc>(context)
                                 .add(AddToCartEvent(product: widget.product));
