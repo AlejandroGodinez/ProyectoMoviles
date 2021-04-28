@@ -166,15 +166,6 @@ class _HomePageState extends State<HomePage> {
             create: (context) => HomeBloc()..add(InitialEvent()),
             child:
                 BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
-              // if (state is ProductAddedState) {
-              //   ScaffoldMessenger.of(context)
-              //     ..hideCurrentSnackBar()
-              //     ..showSnackBar(
-              //       SnackBar(
-              //         content: Text("Agregado al carrito"),
-              //       ),
-              //     );
-              // }
               if (state is LoadedProductsState) {
                 // drinksList = state.bebidas;
                 // consList = state.concentrados;
@@ -216,7 +207,6 @@ class HomeMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (prods.length != 0) {
     return Column(
       children: [
         Column(
@@ -329,11 +319,6 @@ class HomeMain extends StatelessWidget {
       ],
     );
   }
-  //  else {
-  //   return Center(
-  //     child: Text("Todavía no tienes favoritos"),
-  //   );
-  // }
 
   bool alreadyFavorite(List<Product> list, Product product) {
     Product found = list.firstWhere(
