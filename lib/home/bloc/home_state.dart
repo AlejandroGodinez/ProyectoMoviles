@@ -45,11 +45,14 @@ class DrinksState extends HomeState {
 }
 
 class LoadedProductsState extends HomeState {
-  // final List<Product> bebidas;
-  // final List<Product> concentrados;
+  final List<Product> bebidas;
+  final List<Product> concentrados;
 
-  //LoadedProductsState({@required this.bebidas,@required this.concentrados,});
+  LoadedProductsState({
+    @required this.bebidas,
+    @required this.concentrados,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [bebidas, concentrados];
 }

@@ -168,9 +168,8 @@ class _HomePageState extends State<HomePage> {
               child:
                   BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
                 if (state is LoadedProductsState) {
-                  // drinksList = state.bebidas;
-                  // consList = state.concentrados;
-
+                  drinksList = state.bebidas;
+                  consList = state.concentrados;
                 }
               }, builder: (context, state) {
                 favsList =
@@ -180,12 +179,13 @@ class _HomePageState extends State<HomePage> {
                       buttonState: 3, prods: favsList, favs: favsList);
                 } else if (state is ConsState) {
                   return HomeMain(
-                      buttonState: 2, prods: fakeCons, favs: favsList);
+                      buttonState: 2, prods: consList, favs: favsList);
                 } else if (state is DrinksState) {
                   return HomeMain(
-                      buttonState: 1, prods: fakeProds, favs: favsList);
+                      buttonState: 1, prods: drinksList, favs: favsList);
                 }
-                return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
+                return HomeMain(
+                    buttonState: 1, prods: fakeProds, favs: favsList);
               }),
             ),
           ),

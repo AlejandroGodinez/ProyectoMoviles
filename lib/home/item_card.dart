@@ -29,7 +29,7 @@ class _ItemCardState extends State<ItemCard> {
         ),
         child: Column(
           children: [
-            Text("${widget.prod.idProd}"),
+            Text("${widget.prod.name}"),
             Image.network(
               "https://cdn.shopify.com/s/files/1/0087/6065/5938/products/green-tea-15-5oz-can_2000x.png?v=1581728927",
             ),

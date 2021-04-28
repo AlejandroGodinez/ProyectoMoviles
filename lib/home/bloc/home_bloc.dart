@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -10,6 +11,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  var _cFirestore = FirebaseFirestore.instance;
   // referencia a la box previamente abierta (en el main)
   Box _cartBox = Hive.box("Carrito");
   Box _favBox = Hive.box("Favoritos");
@@ -21,7 +23,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeEvent event,
   ) async* {
     if (event is InitialEvent) {
-      yield LoadedProductsState();
+      yield LoadedProductsState(
+          bebidas: await _getProduct("bebidas"),
+          concentrados: await _getProduct("concentrados"));
     } else if (event is AddToCartEvent) {
       //carrito.add(event.product);
       var cartElements = _cartBox.get("bebidas", defaultValue: []);
@@ -50,6 +54,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await _favBox.put("favoritos", newFavElements);
       yield FavoriteDeletedState();
       yield HomeInitial();
+    }
+  }
+
+  Future<List<Product>> _getProduct(String collection) async {
+    try {
+      // var noticias = await _cFirestore.collection("noticias").get();
+      var noticias = await _cFirestore.collection(collection).get();
+      return noticias.docs
+          .map(
+            (element) => Product(
+                idProd: element['idProd'],
+                name: element['name'],
+                amount: 1,
+                size: "Chico",
+                priceCh: element['priceCH'].toDouble(),
+                priceM: element['priceM'].toDouble(),
+                priceG: element['priceG'].toDouble(),
+                type: element['type']
+                // content: element['content'],
+                // //
+                ),
+          )
+          .toList();
+    } catch (e) {
+      print("Error: $e");
+      return [];
     }
   }
 }
