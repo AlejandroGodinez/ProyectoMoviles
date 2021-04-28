@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
-  bool favoritesList;
-  ProductDetail({Key key, @required this.product, @required this.favoritesList})
+  bool isfavorite;
+  ProductDetail({Key key, @required this.product, @required this.isfavorite})
       : super(key: key);
 
   @override
@@ -207,7 +207,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           icon: Icon(Icons.add_shopping_cart),
                           onPressed: () {
                             widget.product.size = size;
-                            print(widget.favoritesList);
+                            print(widget.isfavorite);
                             BlocProvider.of<HomeBloc>(context)
                                 .add(AddToCartEvent(product: widget.product));
                           },
@@ -237,15 +237,17 @@ class _ProductDetailState extends State<ProductDetail> {
                             width: MediaQuery.of(context).size.height * 0.02),
                         IconButton(
                           iconSize: 40.0,
-                          icon: widget.favoritesList
+                          icon: widget.isfavorite
                               ? Icon(Icons.favorite_outlined)
                               : Icon(Icons.favorite_border_outlined),
                           onPressed: () {
                             //TODO: actualizar bien los favoritos
-                            widget.favoritesList = !widget.favoritesList;
-                            widget.favoritesList
-                                ? BlocProvider.of<HomeBloc>(context).add(
-                                    AddFavoriteEvent(product: widget.product))
+                            widget.isfavorite = !widget.isfavorite;
+                            widget.isfavorite
+                                ? BlocProvider.of<HomeBloc>(context)
+                                    .add(AddFavoriteEvent(
+                                    product: widget.product,
+                                  ))
                                 : BlocProvider.of<HomeBloc>(context).add(
                                     DeleteFavoriteEvent(
                                         product: widget.product));

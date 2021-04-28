@@ -7,12 +7,9 @@ import 'package:flutter/material.dart';
 
 class ItemCard extends StatefulWidget {
   final Product prod;
-  final bool favoritesList;
-  ItemCard({
-    Key key,
-    @required this.prod,
-    @required this.favoritesList
-  }) : super(key: key);
+  final bool isfavorite;
+  ItemCard({Key key, @required this.prod, @required this.isfavorite})
+      : super(key: key);
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -43,7 +40,7 @@ class _ItemCardState extends State<ItemCard> {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProductDetail(
                   product: widget.prod,
-                  favoritesList: widget.favoritesList,
+                  isfavorite: widget.isfavorite,
                 )));
       },
     );

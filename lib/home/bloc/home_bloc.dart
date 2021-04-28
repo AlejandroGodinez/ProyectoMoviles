@@ -21,9 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeEvent event,
   ) async* {
     if (event is InitialEvent) {
-      List<Product> favoritos =
-          List<Product>.from(_favBox.get("favoritos", defaultValue: []));
-      yield LoadedProductsState(favoritos: favoritos);
+      yield LoadedProductsState();
     } else if (event is AddToCartEvent) {
       //carrito.add(event.product);
       var cartElements = _cartBox.get("bebidas", defaultValue: []);
@@ -37,10 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else if (event is ShowConsEvent) {
       yield ConsState();
     } else if (event is ShowFavsEvent) {
-      favoritos =
-          List<Product>.from(_favBox.get("favoritos", defaultValue: []));
-      print(favoritos);
-      yield FavoritesState(product: favoritos);
+      yield FavoritesState();
     } else if (event is AddFavoriteEvent) {
       var favElements = _favBox.get("favoritos", defaultValue: []);
       List<dynamic> newFavElements = favElements + [event.product];
@@ -50,7 +45,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else if (event is DeleteFavoriteEvent) {
       List<Product> favElements =
           List<Product>.from(_favBox.get("favoritos", defaultValue: []));
-      favElements.remove(event.product);
+      favElements.removeWhere((item) => item.idProd == event.product.idProd);
       List<dynamic> newFavElements = favElements;
       await _favBox.put("favoritos", newFavElements);
       yield FavoriteDeletedState();

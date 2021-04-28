@@ -5,6 +5,8 @@ import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_listener/hive_listener.dart';
 
 import 'item_card.dart';
 
@@ -21,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   List<Product> fakeProds;
   List<Product> fakeCons;
   List<Product> favsList;
+  List<Product> drinksList;
+  List<Product> consList;
 
   @override
   void initState() {
@@ -134,56 +138,67 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Box box = Hive.box("Favoritos");
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.grey),
-          backgroundColor: white,
-          // automaticallyImplyLeading: false,
-          centerTitle: true,
+    return HiveListener(
+      box: Hive.box("Favoritos"),
+      keys: ["favoritos"],
+      builder: (box) {
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.grey),
+            backgroundColor: white,
+            // automaticallyImplyLeading: false,
+            centerTitle: true,
 
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/cart');
-              },
-            )
-          ],
-        ),
-        drawer: HomeDrawer(),
-        body: BlocProvider(
-          create: (context) => HomeBloc()..add(InitialEvent()),
-          child: BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
-            if (state is ProductAddedState) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text("Agregado al carrito"),
-                  ),
-                );
-            }
-            if (state is LoadedProductsState) {
-              favsList = state.favoritos;
-            }
-            if (state is FavoritesState) {
-              favsList = state.product;
-            }
-          }, builder: (context, state) {
-            print(favsList);
-            if (state is FavoritesState) {
-              return HomeMain(
-                  buttonState: 3, prods: state.product, favs: favsList);
-            } else if (state is ConsState) {
-              return HomeMain(buttonState: 2, prods: fakeCons, favs: favsList);
-            } else if (state is DrinksState) {
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/cart');
+                },
+              )
+            ],
+          ),
+          drawer: HomeDrawer(),
+          body: BlocProvider(
+            create: (context) => HomeBloc()..add(InitialEvent()),
+            child:
+                BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
+              // if (state is ProductAddedState) {
+              //   ScaffoldMessenger.of(context)
+              //     ..hideCurrentSnackBar()
+              //     ..showSnackBar(
+              //       SnackBar(
+              //         content: Text("Agregado al carrito"),
+              //       ),
+              //     );
+              // }
+              if (state is LoadedProductsState) {
+                // drinksList = state.bebidas;
+                // consList = state.concentrados;
+
+              }
+            }, builder: (context, state) {
+              favsList =
+                  List<Product>.from(box.get("favoritos", defaultValue: []));
+              if (state is FavoritesState) {
+                return HomeMain(
+                    buttonState: 3, prods: favsList, favs: favsList);
+              } else if (state is ConsState) {
+                return HomeMain(
+                    buttonState: 2, prods: fakeCons, favs: favsList);
+              } else if (state is DrinksState) {
+                return HomeMain(
+                    buttonState: 1, prods: fakeProds, favs: favsList);
+              }
               return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
-            }
-            return HomeMain(buttonState: 1, prods: fakeProds, favs: favsList);
-          }),
-        ));
+            }),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -302,13 +317,8 @@ class HomeMain extends StatelessWidget {
                     crossAxisSpacing: MediaQuery.of(context).size.height * 0.03,
                     childAspectRatio: 0.8),
                 itemBuilder: (context, index) => ItemCard(
-                  prod: prods[index],
-                  favoritesList: favs != null
-                      ? favs.contains(
-                          prods[index],
-                        )
-                      : false,
-                ),
+                    prod: prods[index],
+                    isfavorite: alreadyFavorite(favs, prods[index])),
               ),
             ),
           ),
@@ -319,5 +329,13 @@ class HomeMain extends StatelessWidget {
         child: Text("Todavía no tienes favoritos"),
       );
     }
+  }
+
+  bool alreadyFavorite(List<Product> list, Product product) {
+    Product found = list.firstWhere(
+        (element) => element.idProd == product.idProd,
+        orElse: () => null);
+    if (found != null) return true;
+    return false;
   }
 }
