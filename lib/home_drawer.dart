@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,6 +14,8 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
+  var user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     // return BlocProvider(
@@ -42,7 +45,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-            Text("Nombre", style: TextStyle(fontSize: 30)),
+            Text(
+              user.displayName,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 30),
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,
             ),

@@ -9,6 +9,8 @@ abstract class AuthState extends Equatable {
 
 class AuthInitial extends AuthState {}
 
+class RegisterState extends AuthState {}
+
 class AlreadyAuthState extends AuthState {
   @override
   List<Object> get props => [];

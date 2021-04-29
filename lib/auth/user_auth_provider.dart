@@ -34,7 +34,7 @@ class UserAuthProvider {
     final googleAuth = await googleUser.authentication;
 
     print('user: ${googleUser.displayName}');
-    print('user: ${googleUser.email}'); 
+    print('user: ${googleUser.email}');
     print('user: ${googleUser.photoUrl}');
 
     //credenciales para firebase
@@ -53,6 +53,44 @@ class UserAuthProvider {
     assert(user.uid == currentUser.uid);
 
     print('Firebase user auth token: $firebaseAuthToken');
-    
+  }
+
+  //Email and Password
+  Future<void> registerNewUser(
+    String email,
+    String password,
+    String name,
+  ) async {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    await FirebaseAuth.instance.currentUser.updateProfile(displayName: name);
+    // try {
+    //   await FirebaseAuth.instance
+    //       .createUserWithEmailAndPassword(email: email, password: password);
+    //   await FirebaseAuth.instance.currentUser.updateProfile(displayName: name);
+    // } on FirebaseAuthException catch (e) {
+    //   if (e.code == 'weak-password') {
+    //     print('The password provided is too weak.');
+    //   } else if (e.code == 'email-already-in-use') {
+    //     print('The account already exists for that email.');
+    //   }
+    // } catch (e) {
+    //   print(e);
+    // }
+  }
+
+  Future<void> loginEmailUser(String email, String password) async {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+    // try {
+    //   await FirebaseAuth.instance
+    //       .signInWithEmailAndPassword(email: email, password: password);
+    // } on FirebaseAuthException catch (e) {
+    //   if (e.code == 'user-not-found') {
+    //     print('No user found for that email.');
+    //   } else if (e.code == 'wrong-password') {
+    //     print('Wrong password provided for that user.');
+    //   }
+    // }
   }
 }

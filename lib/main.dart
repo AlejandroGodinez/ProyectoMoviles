@@ -59,6 +59,9 @@ class _MyAppState extends State<MyApp> {
           if (state is UnAuthState) {
             return LoginPage();
           }
+          if (state is RegisterState) {
+            return RegisterPage();
+          }
           return SplashScreenPage();
         },
       ),

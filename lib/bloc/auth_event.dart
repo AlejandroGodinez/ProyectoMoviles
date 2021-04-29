@@ -9,6 +9,10 @@ abstract class AuthEvent extends Equatable {
 
 class SplashScreenEvent extends AuthEvent {}
 
+class ShowRegisterEvent extends AuthEvent {}
+
+class ShowLoginEvent extends AuthEvent {}
+
 class VerifyAuthenticationEvent extends AuthEvent {
   @override
   List<Object> get props => [];

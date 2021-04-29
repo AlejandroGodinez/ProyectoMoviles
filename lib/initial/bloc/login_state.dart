@@ -21,6 +21,10 @@ class LoginSuccessState extends LoginState {
   @override
   List<Object> get props => [];
 }
+class RegisterSuccessState extends LoginState {
+  @override
+  List<Object> get props => [];
+}
 
 
 

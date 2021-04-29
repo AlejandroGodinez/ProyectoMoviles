@@ -18,8 +18,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapEventToState(
     AuthEvent event,
   ) async* {
-    if(event is SplashScreenEvent) {
+    if (event is SplashScreenEvent) {
       yield AuthInitial();
+    }
+    if (event is ShowRegisterEvent) {
+      yield RegisterState();
+    }
+    if (event is ShowLoginEvent) {
+      yield UnAuthState();
     }
     if (event is VerifyAuthenticationEvent) {
       // requests a APIs

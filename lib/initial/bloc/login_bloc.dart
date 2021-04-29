@@ -36,6 +36,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         print(e.toString());
         yield LoginErrorState(error: 'Error al hacer login: ${e.toString()}');
       }
+    } else if (event is RegisterEvent) {
+      try {
+        yield LoginLoadingState();
+        await _authProvider.registerNewUser(
+            event.email, event.password, event.name);
+        yield RegisterSuccessState();
+        try {
+          yield LoginLoadingState();
+          await _authProvider.loginEmailUser(event.email, event.password);
+          yield LoginSuccessState();
+        } catch (e) {
+          print(e.toString());
+          yield LoginErrorState(error: '${e.message}');
+        }
+      } catch (e) {
+        print(e.toString());
+        yield LoginErrorState(error: 'Error al hacer login: ${e.message}');
+      }
+    } else if (event is LoginWithEmailEvent) {
+      try {
+        yield LoginLoadingState();
+        await _authProvider.loginEmailUser(event.email, event.password);
+        yield LoginSuccessState();
+      } catch (e) {
+        print(e.toString());
+        yield LoginErrorState(error: '${e.message}');
+      }
     }
   }
 }

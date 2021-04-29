@@ -1,5 +1,4 @@
 import 'package:ProyectoMoviles/bloc/auth_bloc.dart';
-import 'package:ProyectoMoviles/home/home.dart';
 import 'package:ProyectoMoviles/initial/bloc/login_bloc.dart';
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +17,21 @@ class _LoginPageState extends State<LoginPage> {
   bool hidePswd = true;
   bool _showLoading = false;
 
+  var email = TextEditingController();
+  var pass = TextEditingController();
+
   void _googleLogIn(bool _) {
     // invocar al login de firebase con el bloc
     // recodar configurar pantallad Oauth en google Cloud
     print("google");
     _loginBloc.add(LoginWithGoogleEvent());
+  }
+
+  void _emailLogIn(bool _) {
+    // invocar al login de firebase con el bloc
+    // recodar configurar pantallad Oauth en google Cloud
+    print("email and password");
+    _loginBloc.add(LoginWithEmailEvent(email: email.text, password: pass.text));
   }
 
   @override
@@ -39,13 +48,19 @@ class _LoginPageState extends State<LoginPage> {
             context: context,
             builder: (_) {
               return AlertDialog(
-                content: Text("Algo salió mal..."),
+                title: Text("Error en inicio de sesion"),
+                content: Text(
+                  state.error,
+                  textAlign: TextAlign.center,
+                ),
                 actions: [
                   MaterialButton(
+                    color: buttonBlue,
+                    textColor: white,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("ok"),
+                    child: Text("OK"),
                   )
                 ],
               );
@@ -83,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextField(
+                        controller: email,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: 'Correo',
@@ -97,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: TextField(
+                        controller: pass,
                         obscureText: hidePswd,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -143,7 +160,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/home');
+                        //Navigator.of(context).pushNamed('/home');
+                        _emailLogIn(true);
                       },
                     ),
                     SizedBox(
@@ -165,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/register');
+                        BlocProvider.of<AuthBloc>(context).add(ShowRegisterEvent());
                       },
                       child: RichText(
                         textAlign: TextAlign.center,
