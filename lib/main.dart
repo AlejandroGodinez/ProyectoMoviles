@@ -29,14 +29,13 @@ void main() async {
     ..registerAdapter(ProductAdapter());
   await Hive.openBox("Carrito");
   await Hive.openBox("Favoritos");
-  runApp(MyApp());
-  // runApp(
-  //   BlocProvider(
-  //     create: (context) => AuthBloc()..add(VerifyAuthenticationEvent()),
-  //     child: MyApp(),
-  //   ),
-  // );
-  //
+  //runApp(MyApp());
+  runApp(
+    BlocProvider(
+      create: (context) => AuthBloc()..add(SplashScreenEvent()),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -52,18 +51,18 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material app',
-      home: SplashScreenPage(),
-      //  BlocBuilder<AuthBloc, AuthState>(
-      //   builder: (context, state) {
-      //     if (state is AlreadyAuthState) {
-      //       return HomePage();
-      //     }
-      //     if (state is UnAuthState) {
-      //       return SplashScreenPage();
-      //     }
-      //     return SplashScreenPage();
-      //   },
-      // ),
+      home: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is AlreadyAuthState) {
+            return HomePage();
+          }
+          if (state is UnAuthState) {
+            return LoginPage();
+          }
+          return SplashScreenPage();
+        },
+      ),
+      // SplashScreenPage(),
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),

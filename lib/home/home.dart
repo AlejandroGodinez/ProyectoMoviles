@@ -165,28 +165,46 @@ class _HomePageState extends State<HomePage> {
             drawer: HomeDrawer(),
             body: BlocProvider(
               create: (context) => HomeBloc()..add(InitialEvent()),
-              child:
-                  BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
-                if (state is LoadedProductsState) {
-                  drinksList = state.bebidas;
-                  consList = state.concentrados;
-                }
-              }, builder: (context, state) {
-                favsList =
-                    List<Product>.from(box.get("favoritos", defaultValue: []));
-                if (state is FavoritesState) {
-                  return HomeMain(
-                      buttonState: 3, prods: favsList, favs: favsList);
-                } else if (state is ConsState) {
-                  return HomeMain(
-                      buttonState: 2, prods: consList, favs: favsList);
-                } else if (state is DrinksState) {
-                  return HomeMain(
-                      buttonState: 1, prods: drinksList, favs: favsList);
-                }
-                return HomeMain(
-                    buttonState: 1, prods: fakeProds, favs: favsList);
-              }),
+              child: BlocConsumer<HomeBloc, HomeState>(
+                listener: (context, state) {
+                  if (state is LoadedProductsState) {
+                    drinksList = state.bebidas;
+                    consList = state.concentrados;
+                  }
+                },
+                builder: (context, state) {
+                  favsList = List<Product>.from(
+                      box.get("favoritos", defaultValue: []));
+                  if (state is FavoritesState) {
+                    return HomeMain(
+                      buttonState: 3,
+                      prods: favsList,
+                      favs: favsList,
+                    );
+                  } else if (state is ConsState) {
+                    return HomeMain(
+                      buttonState: 2,
+                      prods: consList,
+                      favs: favsList,
+                    );
+                  } else if (state is DrinksState) {
+                    return HomeMain(
+                      buttonState: 1,
+                      prods: drinksList,
+                      favs: favsList,
+                    );
+                  } else if (state is LoadedProductsState) {
+                    return HomeMain(
+                      buttonState: 1,
+                      prods: drinksList,
+                      favs: favsList,
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
           ),
         );

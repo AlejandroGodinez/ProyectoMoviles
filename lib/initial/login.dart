@@ -56,9 +56,9 @@ class _LoginPageState extends State<LoginPage> {
         }
       }, builder: (context, state) {
         if (state is LoginSuccessState) {
-          return HomePage();
+          //return HomePage();
           // Navigator.of(context).pushNamed('/home');
-          // BlocProvider.of<AuthBloc>(context).add(VerifyAuthenticationEvent());
+          BlocProvider.of<AuthBloc>(context).add(VerifyAuthenticationEvent());
         }
         return Scaffold(
           backgroundColor: orange,

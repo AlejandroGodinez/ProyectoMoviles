@@ -7,6 +7,8 @@ abstract class AuthEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class SplashScreenEvent extends AuthEvent {}
+
 class VerifyAuthenticationEvent extends AuthEvent {
   @override
   List<Object> get props => [];

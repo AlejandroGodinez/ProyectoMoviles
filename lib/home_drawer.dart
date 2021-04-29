@@ -118,10 +118,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
               title: Text("Cerrar Sesión"),
               leading: Icon(Icons.logout),
               onTap: () {
-                Navigator.of(context).pushNamed("/");
-                // BlocProvider.of<AuthBloc>(context).add(
-                //   SignOutAuthenticationEvent(),
-                // );
+                //Navigator.of(context).pushNamed("/");
+                BlocProvider.of<AuthBloc>(context).add(
+                  SignOutAuthenticationEvent(),
+                );
               },
             ),
           ],

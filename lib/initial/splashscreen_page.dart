@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:ProyectoMoviles/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../utils/constants.dart';
 
@@ -18,7 +20,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   }
 
   void navigationPage() {
-    Navigator.of(context).pushReplacementNamed('/login');
+    BlocProvider.of<AuthBloc>(context).add(VerifyAuthenticationEvent());
   }
 
   @override
