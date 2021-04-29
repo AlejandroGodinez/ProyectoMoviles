@@ -17,123 +17,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeBloc _homeBloc;
   int buttonState = 1;
-  List<Product> fakeProds;
-  List<Product> fakeCons;
   List<Product> favsList;
   List<Product> drinksList;
   List<Product> consList;
 
   @override
   void initState() {
-    fakeProds = [
-      Product(
-          idProd: "Naranjita",
-          name: "Naranjita",
-          amount: 1,
-          size: "Chico",
-          priceCh: 5,
-          priceM: 5,
-          priceG: 6,
-          type: 'Bebida'),
-      Product(
-          idProd: "Uva",
-          name: "Uva",
-          amount: 1,
-          size: "Chico",
-          priceCh: 6.5,
-          priceM: 5,
-          priceG: 6,
-          type: 'Bebida'),
-      Product(
-          idProd: "Sandia",
-          name: "Sandia",
-          amount: 1,
-          size: "Chico",
-          priceCh: 7,
-          priceM: 5,
-          priceG: 6,
-          type: 'Bebida'),
-      Product(
-          idProd: "Melon",
-          name: "Melon",
-          amount: 1,
-          size: "Chico",
-          priceCh: 10,
-          priceM: 5,
-          priceG: 6,
-          type: 'Bebida'),
-      Product(
-          idProd: "Chile",
-          name: "Chile",
-          amount: 1,
-          size: "Chico",
-          priceCh: 10,
-          priceM: 5,
-          priceG: 6,
-          type: 'Bebida'),
-    ];
-    fakeCons = [
-      Product(
-          idProd: "Cons",
-          name: "Naranjita",
-          amount: 1,
-          size: "Chico",
-          priceCh: 5,
-          priceM: 5,
-          priceG: 6,
-          type: 'Concentrado'),
-      Product(
-          idProd: "Cons",
-          name: "Uva",
-          amount: 1,
-          size: "Chico",
-          priceCh: 6.5,
-          priceM: 5,
-          priceG: 6,
-          type: 'Concentrado'),
-      Product(
-          idProd: "Cons",
-          name: "Sandia",
-          amount: 1,
-          size: "Chico",
-          priceCh: 7,
-          priceM: 5,
-          priceG: 6,
-          type: 'Concentrado'),
-      Product(
-          idProd: "Cons",
-          name: "Melon",
-          amount: 1,
-          size: "Chico",
-          priceCh: 10,
-          priceM: 5,
-          priceG: 6,
-          type: 'Concentrado'),
-    ];
-    // fakeFavs = [
-    //   Product(
-    //       idProd: "Fav",
-    //       name: "Naranjita",
-    //       amount: 1,
-    //      size: "Chico",priceCh: 5,
-    //       type: 'Bebida'),
-    //   Product(
-    //       idProd: "Fav",
-    //       name: "Uva",
-    //       amount: 1,
-    //      size: "Chico",priceCh: 6.5,
-    //       type: 'Concentrado'),
-    //   Product(
-    //       idProd: "Fav", name: "Sandia", amount: 1,size: "Chico",priceCh: 7, type: 'Bebida'),
-    //   Product(
-    //       idProd: "Fav",
-    //       name: "Melon",
-    //       amount: 1,
-    //      size: "Chico",priceCh: 10,
-    //       type: 'Concentrado'),
-    // ];
     super.initState();
   }
 
