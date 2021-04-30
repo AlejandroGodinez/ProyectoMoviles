@@ -1,6 +1,11 @@
+import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
+import 'package:ProyectoMoviles/model/order.dart';
 import 'package:ProyectoMoviles/model/product.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PurchaseCart extends StatefulWidget {
   final List<Product> prodlist;
@@ -11,23 +16,25 @@ class PurchaseCart extends StatefulWidget {
 }
 
 class _PurchaseCartState extends State<PurchaseCart> {
+  var user = FirebaseAuth.instance.currentUser;
   double _total = 0;
   double _totalProductos = 0;
   double _envio = 50;
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-        for (var item in widget.prodlist) {
-              double selectedPrice = item.size == "Chico"
-        ? item.priceCh
-        : item.size == "Mediano"
-        ? item.priceM
-        : item.priceG;
+    for (var item in widget.prodlist) {
+      double selectedPrice = item.size == "Chico"
+          ? item.priceCh
+          : item.size == "Mediano"
+              ? item.priceM
+              : item.priceG;
       _totalProductos += (item.amount * selectedPrice);
     }
 
     _total += _totalProductos + _envio;
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -144,7 +151,17 @@ class _PurchaseCartState extends State<PurchaseCart> {
                       color: white,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    BlocProvider.of<CartBloc>(context).add(
+                      SaveOrderEvent(
+                        orden: Order(
+                            client: user.email,
+                            date: DateTime.now().toString(),
+                            prodList: widget.prodlist,
+                            total: _total),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

@@ -30,4 +30,17 @@ class Product {
       @required this.priceM,
       @required this.priceG,
       @required this.type});
+
+    Map<String, dynamic> toJson(){
+      return{
+        'idProd': idProd,
+        'name': name,
+        'amount': amount,
+        'size': size,
+        'priceCh': priceCh,
+        'priceM': priceM,
+        'priceG': priceG,
+        'type': type
+      };
+    }
 }

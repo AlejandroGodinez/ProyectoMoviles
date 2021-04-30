@@ -48,6 +48,22 @@ class _CartState extends State<Cart> {
                 );
             } else if(state is ElementsLoadedState){
                 prodsList = state.prodsList;
+            } else if(state is SavingOrderState){
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text("Guardando elemento en Firebase..."),
+                  ),
+                );
+            }else if(state is SavedOrderState){
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text("Elemento guardado en Firebase..."),
+                  ),
+                );
             }
           },
           builder: (context, state) {

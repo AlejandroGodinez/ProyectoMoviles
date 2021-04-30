@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:ProyectoMoviles/model/order.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -12,6 +14,7 @@ part 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   // referencia a la box previamente abierta (en el main)
   Box _cartBox = Hive.box("Carrito");
+  final _cFirestore = FirebaseFirestore.instance;
   List<Product> _prodsList = [];
   List<Product> get prodsList => _prodsList;
   CartBloc() : super(CartInitial());
@@ -46,6 +49,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       yield ElementsLoadedState(prodsList: _prodsList);
     }else if(event is ShowPurchaseEvent){
       yield ShowPurchaseState();
+    }else if(event is SaveOrderEvent){
+      yield SavingOrderState();
+      await _saveOrder(event.orden);
+      yield SavedOrderState();
+    }
+  }
+
+    Future<bool> _saveOrder(Order noticia) async {
+    try {
+      await _cFirestore.collection("ordenes").add(noticia.toJson());
+      return true;
+    } catch (e) {
+      print("Error: $e");
+      return false;
     }
   }
 }

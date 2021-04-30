@@ -39,3 +39,11 @@ class ShowPurchaseEvent extends CartEvent {
   @override
   List<Object> get props => [];
 }
+
+class SaveOrderEvent extends CartEvent {
+  final Order orden;
+
+  SaveOrderEvent({@required this.orden});
+  @override
+  List<Object> get props => [orden];
+}
