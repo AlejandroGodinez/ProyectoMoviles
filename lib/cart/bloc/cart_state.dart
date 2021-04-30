@@ -21,3 +21,5 @@ class ElementsLoadedState extends CartState {
 
 class RemoveProductState extends CartState{}
 
+class ShowPurchaseState extends CartState{}
+

@@ -4,6 +4,7 @@ import 'package:ProyectoMoviles/auth/user_auth_provider.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive/hive.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -13,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // auth provider
   UserAuthProvider _authProvider = UserAuthProvider();
+  Box _cartBox = Hive.box("Carrito");
 
   @override
   Stream<AuthState> mapEventToState(
@@ -39,6 +41,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield UnAuthState();
     }
     if (event is SignOutAuthenticationEvent) {
+      //borrado de la lista de hive
+      await _cartBox.put("bebidas", []);
       if (FirebaseAuth.instance.currentUser.isAnonymous) {
         await _authProvider.signOutFirebase();
       } else {

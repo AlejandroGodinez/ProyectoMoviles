@@ -34,3 +34,8 @@ class DecrementAmountEvent extends CartEvent {
   @override
   List<Object> get props => [idx];
 }
+
+class ShowPurchaseEvent extends CartEvent {
+  @override
+  List<Object> get props => [];
+}

@@ -44,6 +44,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await _cartBox.put("bebidas", _prodsList);
       yield CartInitial();
       yield ElementsLoadedState(prodsList: _prodsList);
+    }else if(event is ShowPurchaseEvent){
+      yield ShowPurchaseState();
     }
   }
 }

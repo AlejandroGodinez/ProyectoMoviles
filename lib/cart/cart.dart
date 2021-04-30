@@ -1,6 +1,8 @@
 import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
 import 'package:ProyectoMoviles/cart/item_cart.dart';
+import 'package:ProyectoMoviles/cart/purchase_cart.dart';
 import 'package:ProyectoMoviles/home_drawer.dart';
+import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +15,7 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  List<Product> prodsList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +46,8 @@ class _CartState extends State<Cart> {
                     content: Text("Elemento eliminado..."),
                   ),
                 );
+            } else if(state is ElementsLoadedState){
+                prodsList = state.prodsList;
             }
           },
           builder: (context, state) {
@@ -82,7 +87,9 @@ class _CartState extends State<Cart> {
                                 color: white,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              BlocProvider.of<CartBloc>(context).add(ShowPurchaseEvent());
+                            },
                           ),
                         ),
                       ),
@@ -90,7 +97,11 @@ class _CartState extends State<Cart> {
                   ],
                 ),
               );
-            } else
+            }else if(state is ShowPurchaseState){
+              return PurchaseCart(
+                prodlist: prodsList,
+              );
+            }else
               return Center(
                 child: Text("No hay elementos"),
               );
