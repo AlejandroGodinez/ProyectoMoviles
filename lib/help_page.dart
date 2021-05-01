@@ -1,5 +1,6 @@
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 
 class HelpPage extends StatefulWidget {
   HelpPage({Key key}) : super(key: key);
@@ -7,6 +8,8 @@ class HelpPage extends StatefulWidget {
   @override
   _HelpPageState createState() => _HelpPageState();
 }
+
+var msg = TextEditingController();
 
 class _HelpPageState extends State<HelpPage> {
   @override
@@ -80,6 +83,7 @@ class _HelpPageState extends State<HelpPage> {
                 right: MediaQuery.of(context).size.width * 0.04,
               ),
               child: TextField(
+                controller: msg,
                 maxLines: 6,
                 decoration: InputDecoration(
                   filled: true,
@@ -109,7 +113,7 @@ class _HelpPageState extends State<HelpPage> {
                     ),
                   ),
                   onPressed: () {
-                    //TODO: Mandar mensaje de ayuda
+                    FlutterOpenWhatsapp.sendSingleMessage("523310907312", msg.text);
                   },
                 ),
               ),

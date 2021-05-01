@@ -25,8 +25,8 @@ class _ItemCartState extends State<ItemCart> {
     selectedPrice = widget.prod.size == "Chico"
         ? widget.prod.priceCh
         : widget.prod.size == "Mediano"
-        ? widget.prod.priceM
-        : widget.prod.priceG;
+            ? widget.prod.priceM
+            : widget.prod.priceG;
     return Container(
         height: 170,
         child: Stack(
@@ -53,7 +53,7 @@ class _ItemCartState extends State<ItemCart> {
             ),
             Container(
               margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.06,
+                top: MediaQuery.of(context).size.height * 0.04,
                 left: MediaQuery.of(context).size.width * 0.33,
               ),
               child: Column(
@@ -65,7 +65,7 @@ class _ItemCartState extends State<ItemCart> {
                   ),
                   SizedBox(width: MediaQuery.of(context).size.height * 0.06),
                   Text(
-                    '${widget.prod.size}',
+                    '${widget.prod.type} ${widget.prod.type == 'Bebida' && widget.prod.size == 'Chico' ? 'Chica' : widget.prod.type == 'Bebida' && widget.prod.size == 'Mediano' ? 'Mediana' : widget.prod.size}',
                     style: TextStyle(fontSize: 15),
                   ),
                 ],

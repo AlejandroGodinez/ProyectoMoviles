@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 
 class PurchaseCart extends StatefulWidget {
   final List<Product> prodlist;
@@ -20,6 +21,8 @@ class _PurchaseCartState extends State<PurchaseCart> {
   double _total = 0;
   double _totalProductos = 0;
   double _envio = 50;
+
+  
   @override
   void initState() {
     super.initState();
@@ -31,8 +34,17 @@ class _PurchaseCartState extends State<PurchaseCart> {
           : item.priceG;
       _totalProductos += (item.amount * selectedPrice);
     }
-
+    
     _total += _totalProductos + _envio;
+  }
+
+  String messageToSend(){
+    String products = "";
+    for (var item in widget.prodlist) {
+      products += "${item.amount} ${item.type}${item.amount > 1 ? 's' : ''} ${item.type == 'Bebida' && item.size == 'Chico' ? 'Chica' : item.type == 'Bebida' && item.size=='Mediano' ? 'Mediana': item.size}${item.amount > 1 ? 's' : ''} de ${item.name} \n";
+    }
+    String msg = '''Hola buen dia. He hecho un pedido por la aplicacion N-ICE Tea.\nMi pedido lleva lo siguiente:\n$products\nMi direccion es:\nCerrada de la plaza 5325\nTotal del pedido: $_total''';
+    return msg;
   }
 
   @override
@@ -162,6 +174,7 @@ class _PurchaseCartState extends State<PurchaseCart> {
                             total: _total),
                       ),
                     );
+                    FlutterOpenWhatsapp.sendSingleMessage("523310907312", messageToSend());
                   },
                 ),
               ],
@@ -171,4 +184,5 @@ class _PurchaseCartState extends State<PurchaseCart> {
       ),
     );
   }
+  
 }

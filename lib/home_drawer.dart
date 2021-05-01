@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -117,7 +118,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         color: Colors.green,
                         size: 40,
                       ),
-                      onPressed: () {})
+                      onPressed: () {
+                        FlutterOpenWhatsapp.sendSingleMessage("523310907312", "");
+                      })
                 ],
               ),
             ),

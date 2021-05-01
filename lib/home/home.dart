@@ -76,8 +76,7 @@ class _HomePageState extends State<HomePage> {
                     if (snapshot.data != null) {
                       Map<String, dynamic> firestorefavs = snapshot.data.data();
                       if (firestorefavs != null) {
-                        favsList = snapshot.data
-                            .data()
+                        favsList = firestorefavs
                             .values
                             .map(
                               (element) => Product(
