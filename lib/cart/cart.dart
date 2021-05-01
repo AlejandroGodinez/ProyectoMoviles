@@ -104,7 +104,6 @@ class _CartState extends State<Cart> {
                               ),
                             ),
                             onPressed: () {
-                              //TODO: Mandar mensaje por whatsapp
                               ////TODO: Implementar Paypal
                               BlocProvider.of<CartBloc>(context)
                                   .add(ShowPurchaseEvent());

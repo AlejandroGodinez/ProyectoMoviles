@@ -1,12 +1,16 @@
+import 'package:ProyectoMoviles/cart/purchase_cart.dart';
 import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'home_drawer.dart';
+
 class ProductDetail extends StatefulWidget {
   final Product product;
   bool isfavorite;
+
   ProductDetail({Key key, @required this.product, @required this.isfavorite})
       : super(key: key);
 
@@ -39,6 +43,26 @@ class _ProductDetailState extends State<ProductDetail> {
                 SnackBar(content: Text("Eliminando de favoritos...")));
         }
       }, builder: (context, state) {
+        if (state is PurchaseState) {
+          List<Product> singleProd = [];
+          singleProd.add(widget.product);
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Comprar producto',
+                style: TextStyle(color: Colors.grey),
+              ),
+              iconTheme: IconThemeData(color: Colors.grey),
+              backgroundColor: white,
+              // automaticallyImplyLeading: false,
+              centerTitle: true,
+
+              actions: <Widget>[],
+            ),
+            drawer: HomeDrawer(),
+            body: PurchaseCart(prodlist: singleProd),
+          );
+        }
         return Scaffold(
           backgroundColor: orange,
           resizeToAvoidBottomInset: true,
@@ -78,8 +102,8 @@ class _ProductDetailState extends State<ProductDetail> {
                             size == "Chico"
                                 ? '\$${widget.product.priceCh}'
                                 : size == "Mediano"
-                                ? '\$${widget.product.priceM}'
-                                : '\$${widget.product.priceG}',
+                                    ? '\$${widget.product.priceM}'
+                                    : '\$${widget.product.priceG}',
                             style: TextStyle(color: white, fontSize: 40.0),
                           ),
                         ),
@@ -228,7 +252,9 @@ class _ProductDetailState extends State<ProductDetail> {
                               ),
                             ),
                             onPressed: () {
-                              //TODO: ir a la ventana de compra de producto
+                              widget.product.size = size;
+                              BlocProvider.of<HomeBloc>(context)
+                                  .add(PurchaseEvent());
                             },
                           ),
                         ),

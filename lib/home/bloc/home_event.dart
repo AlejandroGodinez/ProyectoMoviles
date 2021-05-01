@@ -15,6 +15,11 @@ class AddToCartEvent extends HomeEvent {
   List<Object> get props => [product];
 }
 
+class PurchaseEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class AddFavoriteEvent extends HomeEvent {
   final Product product;
   AddFavoriteEvent({@required this.product});

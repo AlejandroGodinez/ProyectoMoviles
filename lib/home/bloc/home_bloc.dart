@@ -58,6 +58,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await _deleteFavorite(event.product);
       yield FavoriteDeletedState();
       yield HomeInitial();
+    } else if(event is PurchaseEvent){
+      yield PurchaseState();
     }
   }
 
