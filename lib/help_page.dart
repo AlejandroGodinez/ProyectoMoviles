@@ -108,7 +108,9 @@ class _HelpPageState extends State<HelpPage> {
                       color: white,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: Mandar mensaje de ayuda
+                  },
                 ),
               ),
             ),

@@ -162,7 +162,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: TextField(
-                          //TODO implementar comparacion de contraseñas
                           controller: confirmPass,
                           obscureText: hidePswd2,
                           keyboardType: TextInputType.text,

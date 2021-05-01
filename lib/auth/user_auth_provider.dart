@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserAuthProvider {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>["email"]);
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  var _cFirestore = FirebaseFirestore.instance;
 
   bool isAlreadyLogged() {
     var user = FirebaseAuth.instance.currentUser;

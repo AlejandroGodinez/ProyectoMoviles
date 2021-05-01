@@ -46,9 +46,9 @@ class _CartState extends State<Cart> {
                     content: Text("Elemento eliminado..."),
                   ),
                 );
-            } else if(state is ElementsLoadedState){
-                prodsList = state.prodsList;
-            } else if(state is SavingOrderState){
+            } else if (state is ElementsLoadedState) {
+              prodsList = state.prodsList;
+            } else if (state is SavingOrderState) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -56,7 +56,7 @@ class _CartState extends State<Cart> {
                     content: Text("Guardando elemento en Firebase..."),
                   ),
                 );
-            }else if(state is SavedOrderState){
+            } else if (state is SavedOrderState) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -104,7 +104,10 @@ class _CartState extends State<Cart> {
                               ),
                             ),
                             onPressed: () {
-                              BlocProvider.of<CartBloc>(context).add(ShowPurchaseEvent());
+                              //TODO: Mandar mensaje por whatsapp
+                              ////TODO: Implementar Paypal
+                              BlocProvider.of<CartBloc>(context)
+                                  .add(ShowPurchaseEvent());
                             },
                           ),
                         ),
@@ -113,11 +116,11 @@ class _CartState extends State<Cart> {
                   ],
                 ),
               );
-            }else if(state is ShowPurchaseState){
+            } else if (state is ShowPurchaseState) {
               return PurchaseCart(
                 prodlist: prodsList,
               );
-            }else
+            } else
               return Center(
                 child: Text("No hay elementos"),
               );

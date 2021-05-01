@@ -27,8 +27,8 @@ class _PurchaseCartState extends State<PurchaseCart> {
       double selectedPrice = item.size == "Chico"
           ? item.priceCh
           : item.size == "Mediano"
-              ? item.priceM
-              : item.priceG;
+          ? item.priceM
+          : item.priceG;
       _totalProductos += (item.amount * selectedPrice);
     }
 
@@ -46,6 +46,7 @@ class _PurchaseCartState extends State<PurchaseCart> {
               padding: const EdgeInsets.only(top: 16.0),
               child: Center(
                 child: Text(
+                  //TODO: Implementar Google Maps
                   "Pago",
                   style: TextStyle(
                       fontSize: 16.0,
