@@ -15,8 +15,6 @@ class ProductAddedState extends HomeState {
 }
 
 class FavoriteAddedState extends HomeState {
-  final List<Product> favorites;
-  FavoriteAddedState({@required this.favorites});
   @override
   List<Object> get props => [];
 }

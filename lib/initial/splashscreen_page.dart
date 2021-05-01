@@ -40,7 +40,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
             FractionallySizedBox(
               widthFactor: 0.75,
               child: Image.asset(
-                'assets/logo-nicetea.jpg',
+                'assets/logo-nicetea.png',
               ),
             ),
             SizedBox(

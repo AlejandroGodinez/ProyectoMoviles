@@ -40,12 +40,15 @@ class _ItemCartState extends State<ItemCart> {
                   // elevation: 4.0,
                   color: orange),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Image.network(
-                "https://cdn.shopify.com/s/files/1/0087/6065/5938/products/green-tea-15-5oz-can_2000x.png?v=1581728927",
-                height: 180,
-                width: 180,
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 3),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Image.network(
+                  widget.prod.urlToImage,
+                  height: 170,
+                  width: 170,
+                ),
               ),
             ),
             Container(
@@ -60,7 +63,7 @@ class _ItemCartState extends State<ItemCart> {
                     '${widget.prod.name}',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 5),
+                  SizedBox(width: MediaQuery.of(context).size.height * 0.06),
                   Text(
                     '${widget.prod.size}',
                     style: TextStyle(fontSize: 15),

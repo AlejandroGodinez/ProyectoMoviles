@@ -2,6 +2,8 @@ import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/home_drawer.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -22,86 +24,117 @@ class _HomePageState extends State<HomePage> {
   List<Product> drinksList;
   List<Product> consList;
 
-  
-
   @override
   void initState() {
     super.initState();
   }
 
-  Box box = Hive.box("Favoritos");
+  var user = FirebaseAuth.instance.currentUser;
+  // Box box = Hive.box("Favoritos");
   @override
   Widget build(BuildContext context) {
-    return HiveListener(
-      box: Hive.box("Favoritos"),
-      keys: ["favoritos"],
-      builder: (box) {
-        return Container(
-          height: MediaQuery.of(context).size.height,
-          child: Scaffold(
-            appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.grey),
-              backgroundColor: white,
-              // automaticallyImplyLeading: false,
-              centerTitle: true,
+    Stream misFavoritos = FirebaseFirestore.instance
+        .collection('favoritos')
+        .doc(user.email)
+        .snapshots();
+    // return
+    // HiveListener(
+    //   box: Hive.box("Favoritos"),
+    //   keys: ["favoritos"],
+    //   builder: (box) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.grey),
+          backgroundColor: white,
+          // automaticallyImplyLeading: false,
+          centerTitle: true,
 
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/cart');
-                  },
-                )
-              ],
-            ),
-            drawer: HomeDrawer(),
-            body: BlocProvider(
-              create: (context) => HomeBloc()..add(InitialEvent()),
-              child: BlocConsumer<HomeBloc, HomeState>(
-                listener: (context, state) {
-                  if (state is LoadedProductsState) {
-                    drinksList = state.bebidas;
-                    consList = state.concentrados;
-                  }
-                },
-                builder: (context, state) {
-                  favsList = List<Product>.from(
-                      box.get("favoritos", defaultValue: []));
-                  if (state is FavoritesState) {
-                    return HomeMain(
-                      buttonState: 3,
-                      prods: favsList,
-                      favs: favsList,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/cart');
+              },
+            )
+          ],
+        ),
+        drawer: HomeDrawer(),
+        body: BlocProvider(
+          create: (context) => HomeBloc()..add(InitialEvent()),
+          child: BlocConsumer<HomeBloc, HomeState>(
+            listener: (context, state) {
+              if (state is LoadedProductsState) {
+                drinksList = state.bebidas;
+                consList = state.concentrados;
+              }
+            },
+            builder: (context, state) {
+              return StreamBuilder<DocumentSnapshot>(
+                  stream: misFavoritos,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.data != null) {
+                      Map<String, dynamic> firestorefavs = snapshot.data.data();
+                      if (firestorefavs != null) {
+                        favsList = snapshot.data
+                            .data()
+                            .values
+                            .map(
+                              (element) => Product(
+                                  idProd: element['idProd'],
+                                  name: element['name'],
+                                  amount: 1,
+                                  size: "Chico",
+                                  priceCh: element['priceCh'].toDouble(),
+                                  priceM: element['priceM'].toDouble(),
+                                  priceG: element['priceG'].toDouble(),
+                                  type: element['type'],
+                                  description: element['description'],
+                                  urlToImage: element['urlToImage']),
+                            )
+                            .toList();
+                      } else {
+                        favsList = [];
+                      }
+                    }
+                    if (state is FavoritesState) {
+                      return HomeMain(
+                        buttonState: 3,
+                        prods: favsList,
+                        favs: favsList,
+                      );
+                    } else if (state is ConsState) {
+                      return HomeMain(
+                        buttonState: 2,
+                        prods: consList,
+                        favs: favsList,
+                      );
+                    } else if (state is DrinksState) {
+                      return HomeMain(
+                        buttonState: 1,
+                        prods: drinksList,
+                        favs: favsList,
+                      );
+                    } else if (state is LoadedProductsState) {
+                      return HomeMain(
+                        buttonState: 1,
+                        prods: drinksList,
+                        favs: favsList,
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
-                  } else if (state is ConsState) {
-                    return HomeMain(
-                      buttonState: 2,
-                      prods: consList,
-                      favs: favsList,
-                    );
-                  } else if (state is DrinksState) {
-                    return HomeMain(
-                      buttonState: 1,
-                      prods: drinksList,
-                      favs: favsList,
-                    );
-                  } else if (state is LoadedProductsState) {
-                    return HomeMain(
-                      buttonState: 1,
-                      prods: drinksList,
-                      favs: favsList,
-                    );
-                  }
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
+                  });
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
+    //   },
+    // );
   }
 }
 

@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     FractionallySizedBox(
                       widthFactor: 0.75,
                       child: Image.asset(
-                        'assets/logo-nicetea.jpg',
+                        'assets/logo-nicetea.png',
                       ),
                     ),
                     SizedBox(
@@ -183,7 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        BlocProvider.of<AuthBloc>(context).add(ShowRegisterEvent());
+                        BlocProvider.of<AuthBloc>(context)
+                            .add(ShowRegisterEvent());
                       },
                       child: RichText(
                         textAlign: TextAlign.center,

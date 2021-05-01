@@ -1,6 +1,7 @@
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/product_detail.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // import 'bloc/home_bloc.dart';
@@ -20,18 +21,39 @@ class _ItemCardState extends State<ItemCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.all(40.0),
+        //padding: EdgeInsets.all(50.0),
         height: 180,
         width: 160,
         decoration: BoxDecoration(
           color: orange,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Column(
+        child: Stack(
           children: [
-            Text("${widget.prod.name}"),
-            Image.network(
-              "https://cdn.shopify.com/s/files/1/0087/6065/5938/products/green-tea-15-5oz-can_2000x.png?v=1581728927",
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  widget.prod.name,
+                  style: TextStyle(
+                    color: white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 40.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Image.network(
+                  widget.prod.urlToImage,
+                  scale: 2,
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
           ],
         ),

@@ -103,7 +103,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       top: MediaQuery.of(context).size.height * 0.2,
                       right: MediaQuery.of(context).size.width * 0.01),
                   child: Image.network(
-                    "https://cdn.shopify.com/s/files/1/0087/6065/5938/products/green-tea-15-5oz-can_2000x.png?v=1581728927",
+                    widget.product.urlToImage,
                     height: 200,
                     width: 200,
                   ),
@@ -187,8 +187,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     left: MediaQuery.of(context).size.width * 0.04,
                     right: MediaQuery.of(context).size.width * 0.04,
                   ),
-                  child: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'),
+                  child: Text(widget.product.description),
                 ),
                 Container(
                   alignment: Alignment.bottomCenter,

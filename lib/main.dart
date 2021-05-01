@@ -28,7 +28,7 @@ void main() async {
     ..init(_localStorage.path)
     ..registerAdapter(ProductAdapter());
   await Hive.openBox("Carrito");
-  await Hive.openBox("Favoritos");
+  // await Hive.openBox("Favoritos");
   //runApp(MyApp());
   runApp(
     BlocProvider(
