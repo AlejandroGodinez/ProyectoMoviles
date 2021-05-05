@@ -1,5 +1,6 @@
 import 'package:ProyectoMoviles/cart/purchase_cart.dart';
 import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
+import 'package:ProyectoMoviles/home/bloc/product_favorite_bloc.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +25,9 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        return HomeBloc();
+        return ProductFavoriteBloc();
       },
-      child: BlocConsumer<HomeBloc, HomeState>(listener: (context, state) {
+      child: BlocConsumer<ProductFavoriteBloc, ProductFavoriteState>(listener: (context, state) {
         if (state is ProductAddedState) {
           return ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -48,6 +49,12 @@ class _ProductDetailState extends State<ProductDetail> {
           singleProd.add(widget.product);
           return Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  BlocProvider.of<ProductFavoriteBloc>(context).add(PurchaseBackEvent());
+                },
+              ),
               title: Text(
                 'Comprar producto',
                 style: TextStyle(color: Colors.grey),
@@ -68,11 +75,18 @@ class _ProductDetailState extends State<ProductDetail> {
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
             backgroundColor: orange,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                BlocProvider.of<HomeBloc>(context).add(ShowDrinksEvent());
+              },
+            ),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.shopping_cart),
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/cart');
+                  // Navigator.of(context).pushNamed('/cart');
+                  BlocProvider.of<HomeBloc>(context).add(ShowCartEvent());
                 },
               )
             ],
@@ -231,7 +245,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           onPressed: () {
                             widget.product.size = size;
                             print(widget.isfavorite);
-                            BlocProvider.of<HomeBloc>(context)
+                            BlocProvider.of<ProductFavoriteBloc>(context)
                                 .add(AddToCartEvent(product: widget.product));
                           },
                         ),
@@ -253,7 +267,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             ),
                             onPressed: () {
                               widget.product.size = size;
-                              BlocProvider.of<HomeBloc>(context)
+                              BlocProvider.of<ProductFavoriteBloc>(context)
                                   .add(PurchaseEvent());
                             },
                           ),
@@ -268,11 +282,11 @@ class _ProductDetailState extends State<ProductDetail> {
                           onPressed: () {
                             widget.isfavorite = !widget.isfavorite;
                             widget.isfavorite
-                                ? BlocProvider.of<HomeBloc>(context)
+                                ? BlocProvider.of<ProductFavoriteBloc>(context)
                                     .add(AddFavoriteEvent(
                                     product: widget.product,
                                   ))
-                                : BlocProvider.of<HomeBloc>(context).add(
+                                : BlocProvider.of<ProductFavoriteBloc>(context).add(
                                     DeleteFavoriteEvent(
                                         product: widget.product));
                             setState(() {});

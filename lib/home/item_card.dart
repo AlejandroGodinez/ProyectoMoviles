@@ -3,6 +3,9 @@ import 'package:ProyectoMoviles/product_detail.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/home_bloc.dart';
 
 // import 'bloc/home_bloc.dart';
 
@@ -59,11 +62,17 @@ class _ItemCardState extends State<ItemCard> {
         ),
       ),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductDetail(
-                  product: widget.prod,
-                  isfavorite: widget.isfavorite,
-                )));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => ProductDetail(
+        //           product: widget.prod,
+        //           isfavorite: widget.isfavorite,
+        //         )));
+        BlocProvider.of<HomeBloc>(context).add(
+          ShowCartItemEvent(
+            product: widget.prod,
+            isfavorite: widget.isfavorite,
+          ),
+        );
       },
     );
   }

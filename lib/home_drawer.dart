@@ -1,3 +1,4 @@
+import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +62,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
               ),
               leading: Icon(Icons.home),
               onTap: () {
-                Navigator.of(context).pushNamed('/home');
+                BlocProvider.of<HomeBloc>(context).add(InitialEvent());
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -71,7 +73,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
               ),
               leading: Icon(Icons.store),
               onTap: () {
-                Navigator.of(context).pushNamed('/orders');
+                BlocProvider.of<HomeBloc>(context).add(OrderEvent());
+                Navigator.pop(context);
               },
             ),
             // ListTile(
@@ -85,7 +88,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   style: TextStyle(fontSize: 16, color: Colors.grey[600])),
               leading: Icon(Icons.help),
               onTap: () {
-                Navigator.of(context).pushNamed('/help');
+                BlocProvider.of<HomeBloc>(context).add(HelpEvent());
+                Navigator.pop(context);
               },
             ),
             Spacer(),

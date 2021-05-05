@@ -9,25 +9,6 @@ abstract class HomeState extends Equatable {
 
 class HomeInitial extends HomeState {}
 
-class ProductAddedState extends HomeState {
-  @override
-  List<Object> get props => [];
-}
-
-class PurchaseState extends HomeState {
-  @override
-  List<Object> get props => [];
-}
-
-class FavoriteAddedState extends HomeState {
-  @override
-  List<Object> get props => [];
-}
-
-class FavoriteDeletedState extends HomeState {
-  @override
-  List<Object> get props => [];
-}
 
 class FavoritesState extends HomeState {
   // final List<Product> product;
@@ -42,9 +23,37 @@ class ConsState extends HomeState {
   List<Object> get props => [];
 }
 
+class HelpState extends HomeState {
+  @override
+  List<Object> get props => [];
+}
+
+class OrderState extends HomeState {
+  @override
+  List<Object> get props => [];
+}
+
 class DrinksState extends HomeState {
   @override
   List<Object> get props => [];
+}
+
+class ShowCartState extends HomeState {
+  @override
+  List<Object> get props => [];
+}
+
+class ShowCartItemState extends HomeState {
+  final Product product;
+  final bool isfavorite;
+
+  ShowCartItemState({
+    @required this.product,
+    @required this.isfavorite
+  });
+  
+  @override
+  List<Object> get props => [product, isfavorite];
 }
 
 class LoadedProductsState extends HomeState {

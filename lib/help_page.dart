@@ -14,12 +14,7 @@ var msg = TextEditingController();
 class _HelpPageState extends State<HelpPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: orange,
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Stack(
           children: [
             Container(
@@ -143,7 +138,6 @@ class _HelpPageState extends State<HelpPage> {
             )
           ],
         ),
-      ),
     );
   }
 }

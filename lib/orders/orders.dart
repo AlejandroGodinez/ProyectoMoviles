@@ -15,34 +15,13 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Tus Pedidos',
-          style: TextStyle(color: Colors.grey),
-        ),
-        iconTheme: IconThemeData(color: Colors.grey),
-        backgroundColor: white,
-        // automaticallyImplyLeading: false,
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.of(context).pushNamed('/cart');
-            },
-          )
-        ],
-      ),
-      drawer: HomeDrawer(),
-      body: Padding(
+    return Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
             itemCount: 4,
             itemBuilder: (BuildContext context, int index) {
               return ItemOrder();
             },
-          )),
-    );
+    ));
   }
 }

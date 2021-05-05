@@ -1,12 +1,16 @@
+import 'package:ProyectoMoviles/cart/cart.dart';
 import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/home_drawer.dart';
 import 'package:ProyectoMoviles/model/product.dart';
+import 'package:ProyectoMoviles/orders/orders.dart';
+import 'package:ProyectoMoviles/product_detail.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../help_page.dart';
 import 'item_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,55 +33,53 @@ class _HomePageState extends State<HomePage> {
 
   var user = FirebaseAuth.instance.currentUser;
   // Box box = Hive.box("Favoritos");
+  bool showCart = true;
   @override
   Widget build(BuildContext context) {
     Stream misFavoritos = FirebaseFirestore.instance
         .collection('favoritos')
         .doc(user.email)
         .snapshots();
-    // return
-    // HiveListener(
-    //   box: Hive.box("Favoritos"),
-    //   keys: ["favoritos"],
-    //   builder: (box) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.grey),
-          backgroundColor: white,
-          // automaticallyImplyLeading: false,
-          centerTitle: true,
+    return BlocProvider(
+      create: (context) => HomeBloc()..add(InitialEvent()),
+      child: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is LoadedProductsState) {
+            drinksList = state.bebidas;
+            consList = state.concentrados;
+          }
+        },
+        builder: (context, state) {
+          if(state is ShowCartItemState){
+            return ProductDetail(product: state.product, isfavorite: state.isfavorite); 
+          } else return Container(
+            height: MediaQuery.of(context).size.height,
+            child: Scaffold(
+              appBar: AppBar(
+                iconTheme: IconThemeData(color: Colors.grey),
+                backgroundColor: white,
+                // automaticallyImplyLeading: false,
+                centerTitle: true,
 
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/cart');
-              },
-            )
-          ],
-        ),
-        drawer: HomeDrawer(),
-        body: BlocProvider(
-          create: (context) => HomeBloc()..add(InitialEvent()),
-          child: BlocConsumer<HomeBloc, HomeState>(
-            listener: (context, state) {
-              if (state is LoadedProductsState) {
-                drinksList = state.bebidas;
-                consList = state.concentrados;
-              }
-            },
-            builder: (context, state) {
-              return StreamBuilder<DocumentSnapshot>(
+                actions:  !(state is ShowCartState) ? <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      // Navigator.of(context).pushNamed('/cart');
+                      BlocProvider.of<HomeBloc>(context).add(ShowCartEvent());
+                    },
+                  )
+                ] : null,
+              ),
+              drawer: HomeDrawer(),
+              body: StreamBuilder<DocumentSnapshot>(
                   stream: misFavoritos,
                   builder: (BuildContext context,
                       AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (snapshot.data != null) {
                       Map<String, dynamic> firestorefavs = snapshot.data.data();
                       if (firestorefavs != null) {
-                        favsList = firestorefavs
-                            .values
+                        favsList = firestorefavs.values
                             .map(
                               (element) => Product(
                                   idProd: element['idProd'],
@@ -120,18 +122,22 @@ class _HomePageState extends State<HomePage> {
                         prods: drinksList,
                         favs: favsList,
                       );
+                    } else if (state is ShowCartState) {
+                      return Cart();
+                    } else if (state is HelpState){
+                      return HelpPage();
+                    } else if (state is OrderState){
+                      return Orders();
                     }
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  });
-            },
-          ),
-        ),
+                  }),
+            ),
+          );
+        },
       ),
     );
-    //   },
-    // );
   }
 }
 

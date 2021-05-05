@@ -7,34 +7,6 @@ abstract class HomeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AddToCartEvent extends HomeEvent {
-  final Product product;
-
-  AddToCartEvent({@required this.product});
-  @override
-  List<Object> get props => [product];
-}
-
-class PurchaseEvent extends HomeEvent {
-  @override
-  List<Object> get props => [];
-}
-
-class AddFavoriteEvent extends HomeEvent {
-  final Product product;
-  AddFavoriteEvent({@required this.product});
-  @override
-  List<Object> get props => [product];
-}
-
-class DeleteFavoriteEvent extends HomeEvent {
-  final Product product;
-
-  DeleteFavoriteEvent({@required this.product});
-  @override
-  List<Object> get props => [product];
-}
-
 class ShowFavsEvent extends HomeEvent {
   @override
   List<Object> get props => [];
@@ -53,4 +25,32 @@ class ShowDrinksEvent extends HomeEvent {
 class InitialEvent extends HomeEvent {
   @override
   List<Object> get props => [];
+}
+
+class ShowCartEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class HelpEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class OrderEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class ShowCartItemEvent extends HomeEvent {
+  final Product product;
+  final bool isfavorite;
+
+  ShowCartItemEvent({
+    @required this.product, 
+    @required this.isfavorite
+  });
+
+  @override
+  List<Object> get props => [product, isfavorite];
 }
