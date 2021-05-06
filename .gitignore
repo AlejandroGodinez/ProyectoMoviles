@@ -40,4 +40,6 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+#My hidden stuff
 android/app/google-services.json
+android/app/src/main/res/values/secrets.xml

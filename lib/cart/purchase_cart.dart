@@ -8,6 +8,9 @@ import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PurchaseCart extends StatefulWidget {
   final List<Product> prodlist;
@@ -22,6 +25,27 @@ class _PurchaseCartState extends State<PurchaseCart> {
   double _total = 0;
   double _totalProductos = 0;
   double _envio = 50;
+
+  //Google maps stuff bruh
+  var id;
+  String _currentAddress;
+  TextEditingController searchController = TextEditingController();
+  Set<Marker> _mapMarkers = Set();
+  GoogleMapController _mapController;
+  Position _currentPosition;
+  Position _defaultPosition = Position(
+    speed: 0.0,
+    heading: 0.0,
+    accuracy: 0.0,
+    longitude: 20.608148,
+    latitude: -103.417576,
+  );
+
+  Future<void> _onMapCreated(controller) async {
+    _mapController = controller;
+    await _getCurrentPosition();
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -51,6 +75,7 @@ class _PurchaseCartState extends State<PurchaseCart> {
 
   @override
   Widget build(BuildContext context) {
+    if (_currentPosition == null) _currentPosition = _defaultPosition;
     return BlocProvider(
       create: (context) => CartBloc(),
       child: BlocConsumer<CartBloc, CartState>(
@@ -60,33 +85,44 @@ class _PurchaseCartState extends State<PurchaseCart> {
             color: white,
             child: Column(
               children: [
+                SizedBox(height: 16),
+                Text('Elige la dirección de envío:'),
+                Row(
+                  children: [
+                    Flexible(
+                      child: TextField(
+                        controller: searchController,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        var pos = await _getAddressFromText();
+                        _setMarker(pos);
+                      },
+                      icon: Icon(Icons.search),
+                    )
+                  ],
+                ),
                 Expanded(
                   flex: 3,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
+                    padding: const EdgeInsets.all(24),
                     child: Center(
-                      child: Text(
-                        //TODO: Implementar Google Maps
-                        "Pago",
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w500),
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          zoom: 15,
+                          target: LatLng(
+                            _currentPosition.latitude,
+                            _currentPosition.longitude,
+                          ),
+                        ),
+                        onMapCreated: _onMapCreated,
+                        markers: _mapMarkers,
+                        onLongPress: _setMarker,
                       ),
                     ),
                   ),
                 ),
-                // Expanded(
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(top: 8.0),
-                //   ),
-                // ),
-                // Expanded(
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(top: 8.0),
-                //   ),
-                // ),
-
                 Expanded(
                   child: Column(
                     children: [
@@ -199,141 +235,94 @@ class _PurchaseCartState extends State<PurchaseCart> {
       ),
     );
   }
+
+  Future<void> _getCurrentPosition() async {
+    // verify permissions
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    // get current position
+    _currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // get address
+    _currentAddress = await _getGeocodingAddress(_currentPosition);
+
+    searchController.text = _currentAddress;
+    //MarkerID
+    id = MarkerId(_currentPosition.toString());
+
+    // add marker
+    _mapMarkers.add(
+      Marker(
+        markerId: id,
+        position: LatLng(_currentPosition.latitude, _currentPosition.longitude),
+        infoWindow: InfoWindow(
+          title: _currentPosition.toString(),
+          snippet: _currentAddress,
+        ),
+      ),
+    );
+  }
+
+  void _setMarker(LatLng coord) async {
+    // get address
+    String _markerAddress = await _getGeocodingAddress(
+      Position(
+        latitude: coord.latitude,
+        longitude: coord.longitude,
+      ),
+    );
+
+    _currentPosition = Position(
+      latitude: coord.latitude,
+      longitude: coord.longitude,
+    );
+
+    _currentAddress = await _getGeocodingAddress(_currentPosition);
+
+    searchController.text = _currentAddress;
+
+    // add marker
+    setState(() {
+      _mapMarkers = Set();
+      _mapMarkers.add(
+        Marker(
+          markerId: MarkerId(coord.toString()),
+          position: coord,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          infoWindow: InfoWindow(
+            title: coord.toString(),
+            snippet: _markerAddress,
+          ),
+        ),
+      );
+    });
+  }
+
+  Future<String> _getGeocodingAddress(Position position) async {
+    // geocoding
+    var places = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+    if (places != null && places.isNotEmpty) {
+      final Placemark place = places.first;
+      return "${place.street}, ${place.locality}";
+    }
+    return "No address available";
+  }
+
+  Future<LatLng> _getAddressFromText() async {
+    // geocoding
+    var places = await locationFromAddress(searchController.text);
+    if (places != null && places.isNotEmpty) {
+      final Location place = places.first;
+      return LatLng(place.latitude, place.longitude);
+    }
+    return LatLng(_currentPosition.latitude, _currentPosition.longitude);
+  }
 }
-
-// Container(
-//         color: white,
-//         child: Column(
-//           children: [
-//             Expanded(
-//               flex: 3,
-//               child: Padding(
-//                 padding: const EdgeInsets.only(top: 16.0),
-//                 child: Center(
-//                   child: Text(
-//                     //TODO: Implementar Google Maps
-//                     "Pago",
-//                     style: TextStyle(
-//                         fontSize: 16.0,
-//                         color: Colors.grey,
-//                         fontWeight: FontWeight.w500),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             // Expanded(
-//             //   child: Padding(
-//             //     padding: const EdgeInsets.only(top: 8.0),
-//             //   ),
-//             // ),
-//             // Expanded(
-//             //   child: Padding(
-//             //     padding: const EdgeInsets.only(top: 8.0),
-//             //   ),
-//             // ),
-
-//             Expanded(
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                     children: [
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(
-//                             "Productos",
-//                             textAlign: TextAlign.left,
-//                             style: TextStyle(
-//                                 fontSize: 16.0,
-//                                 color: Colors.grey,
-//                                 fontWeight: FontWeight.w500),
-//                           ),
-//                           Text(
-//                             "Envio",
-//                             textAlign: TextAlign.left,
-//                             style: TextStyle(
-//                                 fontSize: 16.0,
-//                                 color: Colors.grey,
-//                                 fontWeight: FontWeight.w500),
-//                           ),
-//                           SizedBox(
-//                             height: 8.0,
-//                           ),
-//                           Text(
-//                             "TOTAL",
-//                             textAlign: TextAlign.left,
-//                             style: TextStyle(
-//                                 fontSize: 16.0,
-//                                 color: Colors.grey,
-//                                 fontWeight: FontWeight.w500),
-//                           ),
-//                         ],
-//                       ),
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(
-//                             "\$$_totalProductos",
-//                             style: TextStyle(
-//                                 fontSize: 16.0,
-//                                 color: Colors.grey,
-//                                 fontWeight: FontWeight.w500),
-//                           ),
-//                           Text(
-//                             "\$$_envio",
-//                             style: TextStyle(
-//                                 fontSize: 16.0,
-//                                 color: Colors.grey,
-//                                 fontWeight: FontWeight.w500),
-//                           ),
-//                           SizedBox(
-//                             height: 8.0,
-//                           ),
-//                           Text(
-//                             "\$$_total",
-//                             style: TextStyle(
-//                                 fontSize: 16.0,
-//                                 color: Colors.grey,
-//                                 fontWeight: FontWeight.w500),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                   SizedBox(
-//                     height: 8.0,
-//                   ),
-//                   TextButton(
-//                     style: TextButton.styleFrom(
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(45.0),
-//                       ),
-//                       backgroundColor: orange,
-//                     ),
-//                     child: Text(
-//                       'Comprar',
-//                       style: TextStyle(
-//                         color: white,
-//                       ),
-//                     ),
-//                     onPressed: () {
-//                       BlocProvider.of<CartBloc>(context).add(
-//                         SaveOrderEvent(
-//                           orden: Order(
-//                               client: user.email,
-//                               date: DateTime.now().toString(),
-//                               prodList: widget.prodlist,
-//                               total: _total),
-//                         ),
-//                       );
-//                       FlutterOpenWhatsapp.sendSingleMessage(
-//                           "523310907312", messageToSend());
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
