@@ -47,16 +47,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await _cartBox.put("bebidas", _prodsList);
       yield CartInitial();
       yield ElementsLoadedState(prodsList: _prodsList);
-    }else if(event is ShowPurchaseEvent){
+    } else if (event is ShowPurchaseEvent) {
       yield ShowPurchaseState();
-    }else if(event is SaveOrderEvent){
+    } else if (event is SaveOrderEvent) {
       yield SavingOrderState();
       await _saveOrder(event.orden);
+      await _cartBox.put("bebidas", []);
       yield SavedOrderState();
     }
   }
 
-    Future<bool> _saveOrder(Order noticia) async {
+  Future<bool> _saveOrder(Order noticia) async {
     try {
       await _cFirestore.collection("ordenes").add(noticia.toJson());
       return true;

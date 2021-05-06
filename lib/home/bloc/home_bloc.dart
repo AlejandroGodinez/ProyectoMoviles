@@ -93,7 +93,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                       (element) => Product(
                           idProd: element['idProd'],
                           name: element['name'],
-                          amount: 1,
+                          amount: element['amount'],
                           size: "Chico",
                           priceCh: element['priceCh'].toDouble(),
                           priceM: element['priceM'].toDouble(),

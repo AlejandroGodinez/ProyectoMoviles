@@ -30,7 +30,20 @@ class AddToCartEvent extends ProductFavoriteEvent {
   List<Object> get props => [product];
 }
 
+class MultipleAddToCartEvent extends ProductFavoriteEvent {
+  final List<Product> products;
+
+  MultipleAddToCartEvent({@required this.products});
+  @override
+  List<Object> get props => [products];
+}
+
 class PurchaseEvent extends ProductFavoriteEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class GetCatalogEvent extends ProductFavoriteEvent {
   @override
   List<Object> get props => [];
 }
@@ -39,4 +52,3 @@ class PurchaseBackEvent extends ProductFavoriteEvent {
   @override
   List<Object> get props => [];
 }
-
