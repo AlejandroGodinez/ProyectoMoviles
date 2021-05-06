@@ -1,4 +1,5 @@
 import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
+import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/model/order.dart';
 import 'package:ProyectoMoviles/model/product.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -183,6 +184,9 @@ class _PurchaseCartState extends State<PurchaseCart> {
                           );
                           FlutterOpenWhatsapp.sendSingleMessage(
                               "523310907312", messageToSend());
+                          BlocProvider.of<HomeBloc>(context).add(
+                            GetOrdersEvent(),
+                          );
                         },
                       ),
                     ],

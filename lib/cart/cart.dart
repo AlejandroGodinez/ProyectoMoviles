@@ -23,8 +23,6 @@ class _CartState extends State<Cart> {
       child: BlocConsumer<CartBloc, CartState>(
         listener: (context, state) {
           if (state is RemoveProductState) {
-            // show snackbar
-
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(

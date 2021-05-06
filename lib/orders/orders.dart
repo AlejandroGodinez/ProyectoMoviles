@@ -1,11 +1,11 @@
-import 'package:ProyectoMoviles/utils/constants.dart';
+import 'package:ProyectoMoviles/model/order.dart';
 import 'package:flutter/material.dart';
 
-import '../home_drawer.dart';
 import 'item_orders.dart';
 
 class Orders extends StatefulWidget {
-  Orders({Key key}) : super(key: key);
+  final List<Order> ordenes;
+  Orders({Key key, @required this.ordenes}) : super(key: key);
 
   @override
   _OrdersState createState() => _OrdersState();
@@ -15,13 +15,19 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   @override
   Widget build(BuildContext context) {
+    if (widget.ordenes.length == 0) {
+      return Center(
+        child: Text("No tienes ordenes en tu historial"),
+      );
+    }
     return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: 4,
-            itemBuilder: (BuildContext context, int index) {
-              return ItemOrder();
-            },
-    ));
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+        itemCount: widget.ordenes.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ItemOrder(order: widget.ordenes[index]);
+        },
+      ),
+    );
   }
 }

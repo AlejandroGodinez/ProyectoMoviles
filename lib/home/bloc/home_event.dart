@@ -42,6 +42,20 @@ class OrderEvent extends HomeEvent {
   List<Object> get props => [];
 }
 
+class ShowOrderDetailEvent extends HomeEvent {
+  final List<Product> productsList;
+  
+  ShowOrderDetailEvent({@required this.productsList});
+  
+  @override
+  List<Object> get props => [productsList];
+}
+
+class GetOrdersEvent extends HomeEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class ShowCartItemEvent extends HomeEvent {
   final Product product;
   final bool isfavorite;

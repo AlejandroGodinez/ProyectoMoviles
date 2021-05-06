@@ -1,8 +1,12 @@
+import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
+import 'package:ProyectoMoviles/model/order.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemOrder extends StatefulWidget {
-  ItemOrder({Key key}) : super(key: key);
+  Order order;
+  ItemOrder({Key key, @required this.order}) : super(key: key);
 
   @override
   _ItemOrderState createState() => _ItemOrderState();
@@ -36,7 +40,7 @@ class _ItemOrderState extends State<ItemOrder> {
                 margin: EdgeInsets.only(left: 70),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Pedido del 30/08/21",
+                  "Pedido del ${parseDate()}",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: white,
@@ -47,7 +51,7 @@ class _ItemOrderState extends State<ItemOrder> {
                 margin: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.7),
                 alignment: Alignment.centerLeft,
-                child: Text("\$ 200",
+                child: Text("\$ ${widget.order.total}",
                     style: TextStyle(
                         color: white,
                         fontSize: 25,
@@ -60,11 +64,20 @@ class _ItemOrderState extends State<ItemOrder> {
                       foregroundColor: MaterialStateProperty.all<Color>(white),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed("/orderDetail");
+                      BlocProvider.of<HomeBloc>(context).add(
+                        ShowOrderDetailEvent(
+                            productsList: widget.order.prodList),
+                      );
                     },
                     icon: Icon(Icons.info),
                     label: Text("detalles")))
           ],
         ));
+  }
+
+  String parseDate() {
+    DateTime date = DateTime.parse(widget.order.date);
+    String formattedDate = "${date.day}/${date.month}/${date.year}";
+    return formattedDate;
   }
 }

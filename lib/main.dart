@@ -65,17 +65,6 @@ class _MyAppState extends State<MyApp> {
           return SplashScreenPage();
         },
       ),
-      // SplashScreenPage(),
-      routes: {
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage(),
-        '/home': (context) => HomePage(),
-        '/help': (context) => HelpPage(),
-        '/cart': (context) => Cart(),
-        // '/product': (context) => ProductDetail(),
-        '/orders': (context) => Orders(),
-        '/orderDetail': (context) => OrderDetails(),
-      },
     );
   }
 }
