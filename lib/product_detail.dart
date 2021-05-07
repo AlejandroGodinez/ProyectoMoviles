@@ -27,7 +27,8 @@ class _ProductDetailState extends State<ProductDetail> {
       create: (context) {
         return ProductFavoriteBloc();
       },
-      child: BlocConsumer<ProductFavoriteBloc, ProductFavoriteState>(listener: (context, state) {
+      child: BlocConsumer<ProductFavoriteBloc, ProductFavoriteState>(
+          listener: (context, state) {
         if (state is ProductAddedState) {
           return ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -52,7 +53,8 @@ class _ProductDetailState extends State<ProductDetail> {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
-                  BlocProvider.of<ProductFavoriteBloc>(context).add(PurchaseBackEvent());
+                  BlocProvider.of<ProductFavoriteBloc>(context)
+                      .add(PurchaseBackEvent());
                 },
               ),
               title: Text(
@@ -116,8 +118,8 @@ class _ProductDetailState extends State<ProductDetail> {
                             size == "Chico"
                                 ? '\$${widget.product.priceCh}'
                                 : size == "Mediano"
-                                    ? '\$${widget.product.priceM}'
-                                    : '\$${widget.product.priceG}',
+                                ? '\$${widget.product.priceM}'
+                                : '\$${widget.product.priceG}',
                             style: TextStyle(color: white, fontSize: 40.0),
                           ),
                         ),
@@ -286,8 +288,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                     .add(AddFavoriteEvent(
                                     product: widget.product,
                                   ))
-                                : BlocProvider.of<ProductFavoriteBloc>(context).add(
-                                    DeleteFavoriteEvent(
+                                : BlocProvider.of<ProductFavoriteBloc>(context)
+                                    .add(DeleteFavoriteEvent(
                                         product: widget.product));
                             setState(() {});
                           },

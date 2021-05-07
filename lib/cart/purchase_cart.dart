@@ -14,6 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PurchaseCart extends StatefulWidget {
   final List<Product> prodlist;
+  String payment = "Efectivo";
   PurchaseCart({Key key, @required this.prodlist}) : super(key: key);
 
   @override
@@ -41,9 +42,9 @@ class _PurchaseCartState extends State<PurchaseCart> {
     latitude: -103.417576,
   );
 
-  Future<void> _onMapCreated(controller) async {
+  Future<void> _onMapCreated(controller) {
     _mapController = controller;
-    await _getCurrentPosition();
+    _getCurrentPosition();
     setState(() {});
   }
 
@@ -54,8 +55,8 @@ class _PurchaseCartState extends State<PurchaseCart> {
       double selectedPrice = item.size == "Chico"
           ? item.priceCh
           : item.size == "Mediano"
-              ? item.priceM
-              : item.priceG;
+          ? item.priceM
+          : item.priceG;
       _totalProductos += (item.amount * selectedPrice);
     }
 
@@ -69,7 +70,7 @@ class _PurchaseCartState extends State<PurchaseCart> {
           "${item.amount} ${item.type}${item.amount > 1 ? 's' : ''} ${item.type == 'Bebida' && item.size == 'Chico' ? 'Chica' : item.type == 'Bebida' && item.size == 'Mediano' ? 'Mediana' : item.size}${item.amount > 1 ? 's' : ''} de ${item.name} \n";
     }
     String msg =
-        '''Hola buen dia. He hecho un pedido por la aplicacion N-ICE Tea.\nMi pedido lleva lo siguiente:\n$products\nMi direccion es:\nCerrada de la plaza 5325\nTotal del pedido: $_total''';
+        '''Hola buen dia. He hecho un pedido por la aplicacion N-ICE Tea.\nMi pedido lleva lo siguiente:\n$products\nTotal del pedido: $_total\nMi direccion es:\n${searchController.text}\n''';
     return msg;
   }
 
@@ -83,152 +84,217 @@ class _PurchaseCartState extends State<PurchaseCart> {
         builder: (context, state) {
           return Container(
             color: white,
-            child: Column(
-              children: [
-                SizedBox(height: 16),
-                Text('Elige la dirección de envío:'),
-                Row(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
                   children: [
-                    Flexible(
-                      child: TextField(
-                        controller: searchController,
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Row(
+                        children: [
+                          Text('Elige un método de pago',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        var pos = await _getAddressFromText();
-                        _setMarker(pos);
-                      },
-                      icon: Icon(Icons.search),
-                    )
-                  ],
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Center(
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          zoom: 15,
-                          target: LatLng(
-                            _currentPosition.latitude,
-                            _currentPosition.longitude,
-                          ),
-                        ),
-                        onMapCreated: _onMapCreated,
-                        markers: _mapMarkers,
-                        onLongPress: _setMarker,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Productos",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                "Envio",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "TOTAL",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.payment = "Efectivo";
+                                    });
+                                  },
+                                  icon: Icon(Icons.payments_rounded),
+                                  iconSize: 40,
+                                  color: widget.payment == "Efectivo"
+                                      ? orange
+                                      : Colors.grey),
+                              Text("Efectivo")
                             ],
                           ),
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "\$$_totalProductos",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.payment = "PayPal";
+                                    });
+                                  },
+                                  icon: Icon(Icons.payment),
+                                  iconSize: 40,
+                                  color: widget.payment == "PayPal"
+                                      ? orange
+                                      : Colors.grey),
+                              Text("PayPal")
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, top: 10.0),
+                      child: Row(
+                        children: [
+                          Text('Elige la dirección de envío:',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: TextField(
+                              controller: searchController,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              var pos = await _getAddressFromText();
+                              _setMarker(pos);
+                            },
+                            icon: Icon(Icons.search),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Center(
+                            child: GoogleMap(
+                          markers: _mapMarkers,
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(
+                              _currentPosition.latitude,
+                              _currentPosition.longitude,
+                            ),
+                            zoom: 10,
+                          ),
+                        )),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Productos",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    "Envio",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Text(
+                                    "TOTAL",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "\$$_envio",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                "\$$_total",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "\$$_totalProductos",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    "\$$_envio",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Text(
+                                    "\$$_total",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(45.0),
+                              ),
+                              backgroundColor: orange,
+                            ),
+                            child: Text(
+                              'Comprar',
+                              style: TextStyle(
+                                color: white,
+                              ),
+                            ),
+                            onPressed: () {
+                              BlocProvider.of<CartBloc>(context).add(
+                                SaveOrderEvent(
+                                  orden: Order(
+                                      client: user.email,
+                                      date: DateTime.now().toString(),
+                                      prodList: widget.prodlist,
+                                      total: _total),
+                                ),
+                              );
+                              FlutterOpenWhatsapp.sendSingleMessage(
+                                  "523310907312", messageToSend());
+                              BlocProvider.of<HomeBloc>(context).add(
+                                GetOrdersEvent(),
+                              );
+                            },
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(45.0),
-                          ),
-                          backgroundColor: orange,
-                        ),
-                        child: Text(
-                          'Comprar',
-                          style: TextStyle(
-                            color: white,
-                          ),
-                        ),
-                        onPressed: () {
-                          BlocProvider.of<CartBloc>(context).add(
-                            SaveOrderEvent(
-                              orden: Order(
-                                  client: user.email,
-                                  date: DateTime.now().toString(),
-                                  prodList: widget.prodlist,
-                                  total: _total),
-                            ),
-                          );
-                          FlutterOpenWhatsapp.sendSingleMessage(
-                              "523310907312", messageToSend());
-                          BlocProvider.of<HomeBloc>(context).add(
-                            GetOrdersEvent(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
         },
@@ -263,6 +329,19 @@ class _PurchaseCartState extends State<PurchaseCart> {
         infoWindow: InfoWindow(
           title: _currentPosition.toString(),
           snippet: _currentAddress,
+        ),
+      ),
+    );
+
+    //mover camara
+    _mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(
+            _currentPosition.latitude,
+            _currentPosition.longitude,
+          ),
+          zoom: 15.0,
         ),
       ),
     );
@@ -301,6 +380,19 @@ class _PurchaseCartState extends State<PurchaseCart> {
         ),
       );
     });
+
+    //mover camara
+    _mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(
+            _currentPosition.latitude,
+            _currentPosition.longitude,
+          ),
+          zoom: 15.0,
+        ),
+      ),
+    );
   }
 
   Future<String> _getGeocodingAddress(Position position) async {
