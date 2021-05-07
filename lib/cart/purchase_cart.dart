@@ -2,11 +2,13 @@ import 'package:ProyectoMoviles/cart/bloc/cart_bloc.dart';
 import 'package:ProyectoMoviles/home/bloc/home_bloc.dart';
 import 'package:ProyectoMoviles/model/order.dart';
 import 'package:ProyectoMoviles/model/product.dart';
+import 'package:ProyectoMoviles/utils/secrets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ProyectoMoviles/utils/constants.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -63,14 +65,15 @@ class _PurchaseCartState extends State<PurchaseCart> {
     _total += _totalProductos + _envio;
   }
 
-  String messageToSend() {
+  String messageToSend(String nonce) {
     String products = "";
     for (var item in widget.prodlist) {
       products +=
           "${item.amount} ${item.type}${item.amount > 1 ? 's' : ''} ${item.type == 'Bebida' && item.size == 'Chico' ? 'Chica' : item.type == 'Bebida' && item.size == 'Mediano' ? 'Mediana' : item.size}${item.amount > 1 ? 's' : ''} de ${item.name} \n";
     }
     String msg =
-        '''Hola buen dia. He hecho un pedido por la aplicacion N-ICE Tea.\nMi pedido lleva lo siguiente:\n$products\nTotal del pedido: $_total\nMi direccion es:\n${searchController.text}\n''';
+        '''Hola buen dia. He hecho un pedido por la aplicacion N-ICE Tea.\nMi pedido lleva lo siguiente:\n$products\nTotal del pedido: $_total\nMétodo de pago:${widget.payment}\nMi direccion es:\n${searchController.text}\n''';
+    msg = nonce != "" ? msg + "Codigo Paypal: $nonce\n": msg;
     return msg;
   }
 
@@ -177,6 +180,7 @@ class _PurchaseCartState extends State<PurchaseCart> {
                             child: GoogleMap(
                           markers: _mapMarkers,
                           onMapCreated: _onMapCreated,
+                          onLongPress: _setMarker,
                           initialCameraPosition: CameraPosition(
                             target: LatLng(
                               _currentPosition.latitude,
@@ -272,7 +276,35 @@ class _PurchaseCartState extends State<PurchaseCart> {
                                 color: white,
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async{
+                              String strNonce = "";
+                              if(widget.payment == 'PayPal'){
+                                var request = BraintreeDropInRequest(
+                                  tokenizationKey: sandBoxKey,
+                                  collectDeviceData: true,
+                                  paypalRequest: BraintreePayPalRequest(
+                                    // amount: '1.0', 
+                                    amount: _total.toString(), 
+                                    displayName: 'NICE',
+                                    
+                                  ),
+                                  cardEnabled: false,
+                                );
+
+                                BraintreeDropInResult result;
+                                try {
+                                  result =  await BraintreeDropIn.start(request);  
+                                } catch (e) {
+                                  print(e);
+                                }
+                                
+                                if(result != null){
+                                  print(result.paymentMethodNonce.description);
+                                  print(result.paymentMethodNonce.nonce);
+                                  strNonce = result.paymentMethodNonce.nonce + "\nDe: " + result.paymentMethodNonce.description;
+                                }
+                              }
+                              
                               BlocProvider.of<CartBloc>(context).add(
                                 SaveOrderEvent(
                                   orden: Order(
@@ -282,11 +314,14 @@ class _PurchaseCartState extends State<PurchaseCart> {
                                       total: _total),
                                 ),
                               );
+                              
                               FlutterOpenWhatsapp.sendSingleMessage(
-                                  "523310907312", messageToSend());
+                                  "523310907312", messageToSend(strNonce));
                               BlocProvider.of<HomeBloc>(context).add(
                                 GetOrdersEvent(),
                               );
+                              strNonce = "";
+                              
                             },
                           ),
                         ],
